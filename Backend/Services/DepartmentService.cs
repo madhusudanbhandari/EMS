@@ -4,6 +4,7 @@ using Backend.Interface;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
+namespace Backend.Service;
 public class DepartmentService : IDepartmentService
 {
     private readonly AppDbContext _context;

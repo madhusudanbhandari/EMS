@@ -1,7 +1,7 @@
 
-namespace Backend.Models;
+namespace Backend.Dtos.Employee;
 
-public class Employee
+public class CreateEmployeeDto
 {   
     public int Id{get;set;}
     public string FirstName{get;set;}=string.Empty;
@@ -11,5 +11,4 @@ public class Employee
 
     public string Salary{get;set;}=string.Empty;
     public int DepartmentId{get;set;}
-    public Department? Department{get;set;}
 }
