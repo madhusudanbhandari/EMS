@@ -246,3 +246,13 @@
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/obj/Debug/net10.0/Backend.pdb
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/obj/Debug/net10.0/Backend.genruntimeconfig.cache
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/obj/Debug/net10.0/ref/Backend.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/BCrypt-Net-Next.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.Bcl.Cryptography.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.IdentityModel.Logging.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll

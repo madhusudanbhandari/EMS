@@ -18,21 +18,39 @@ public class EmployeeService: IEmployeeService
     }
 
 
-    public async Task<IEnumerable<Employee>> GetAllAsync()
+    public async Task<IEnumerable<EmployeeResponeDto>> GetAllAsync()
     {
         return await _context.Employees
-        .Include(e=>e.Department)
-        .AsNoTracking().
-        ToListAsync();
+        .AsNoTracking()
+        .Select(e=>new EmployeeResponeDto
+        {
+            Id=e.Id,
+            FirstName=e.FirstName,
+            LastName=e.LastName,
+            Email=e.Email,
+            Salary=e.Salary,
+            DepartmentId=e.DepartmentId,
+            DepartmentName=e.Department!.Name
+        })
+        .ToListAsync();
      
     }
 
-    public async Task<Employee?> GetByIdAsync(int id)
+    public async Task<EmployeeResponeDto?> GetByIdAsync(int id)
     {
         return await _context.Employees
-        .Include(e=>e.Department)
         .AsNoTracking()
-        .FirstOrDefaultAsync(e=>e.Id==id);
+        .Where(e=>e.Id==id)
+        .Select(e=>new EmployeeResponeDto
+        {
+            Id=e.Id,
+            FirstName=e.FirstName,
+            LastName=e.LastName,
+            Email=e.Email,
+            Salary=e.Salary,
+            DepartmentId=e.DepartmentId,
+            DepartmentName=e.Department!.Name
+        }).FirstOrDefaultAsync();
     }
 
     public async Task<Employee?> CreateAsync(CreateEmployeeDto dto)
