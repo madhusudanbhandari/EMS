@@ -2,6 +2,7 @@
 using Backend.Dtos.Employee;
 using Backend.Interface;
 using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controller;
@@ -18,6 +19,7 @@ public class EmployeeController : ControllerBase
         _employeeService=employeeService;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -25,6 +27,7 @@ public class EmployeeController : ControllerBase
         return Ok(employees);
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
