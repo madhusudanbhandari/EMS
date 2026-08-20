@@ -10,6 +10,7 @@ using FluentValidation;
 using Backend.Validators;
 using FluentValidation.AspNetCore;
 using Backend.Middleware;
+using Microsoft.OpenApi;
 
 
 var builder=WebApplication.CreateBuilder(args);
@@ -39,7 +40,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 });
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type=SecuritySchemeType.Http,
+        Scheme="bearer",
+        BearerFormat="JWT",
+        Description="Enter yout JWT token"
+    });
+    options.AddSecurityRequirement(document=>
+    new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer",document)]=[]
+    });
+});
 
 builder.Services.AddDbContext<AppDbContext>(options=>
 options.UseNpgsql(

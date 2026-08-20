@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.Controller;
 
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class EmployeeController : ControllerBase
@@ -41,6 +42,7 @@ public class EmployeeController : ControllerBase
         return Ok(employee);
     }
 
+    [Authorize(Roles ="Admin")]
     [HttpPost]
     public async Task<IActionResult> Create(CreateEmployeeDto dto)
     {
@@ -58,6 +60,7 @@ public class EmployeeController : ControllerBase
         );
     }
 
+    [Authorize(Roles ="Admin")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id,UpdateEmployeeDto dto)
     {
@@ -70,6 +73,7 @@ public class EmployeeController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles ="Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
