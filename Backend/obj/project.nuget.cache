@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "sorB7qEjNSw=",
+  "dgSpecHash": "TkW2rgipdpk=",
   "success": true,
   "projectFilePath": "/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/Backend.csproj",
   "expectedPackageFiles": [
+    "/Users/madhusudanbhandari/.nuget/packages/automapper/16.2.0/automapper.16.2.0.nupkg.sha512",
     "/Users/madhusudanbhandari/.nuget/packages/bcrypt.net-next/4.2.0/bcrypt.net-next.4.2.0.nupkg.sha512",
     "/Users/madhusudanbhandari/.nuget/packages/fluentvalidation/12.1.1/fluentvalidation.12.1.1.nupkg.sha512",
     "/Users/madhusudanbhandari/.nuget/packages/fluentvalidation.aspnetcore/11.3.1/fluentvalidation.aspnetcore.11.3.1.nupkg.sha512",

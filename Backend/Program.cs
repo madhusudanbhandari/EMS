@@ -11,7 +11,7 @@ using Backend.Validators;
 using FluentValidation.AspNetCore;
 using Backend.Middleware;
 using Microsoft.OpenApi;
-
+using Backend.Mappings;
 
 var builder=WebApplication.CreateBuilder(args);
 
@@ -40,6 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 });
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAutoMapper(cfg=>{},typeof(MappingProfile));
 
 builder.Services.AddSwaggerGen(options =>
 {

@@ -4,6 +4,7 @@ using Backend.Interface;
 using Backend.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
 namespace Backend.Service;
 
@@ -11,46 +12,36 @@ namespace Backend.Service;
 public class EmployeeService: IEmployeeService
 {
     private readonly AppDbContext _context;
+    private readonly IMapper _mapper;
 
-    public EmployeeService(AppDbContext context)
+    public EmployeeService(AppDbContext context,IMapper mapper)
     {
         _context=context;
+        _mapper=mapper;
     }
 
 
     public async Task<IEnumerable<EmployeeResponeDto>> GetAllAsync()
     {
-        return await _context.Employees
-        .AsNoTracking()
-        .Select(e=>new EmployeeResponeDto
-        {
-            Id=e.Id,
-            FirstName=e.FirstName,
-            LastName=e.LastName,
-            Email=e.Email,
-            Salary=e.Salary,
-            DepartmentId=e.DepartmentId,
-            DepartmentName=e.Department!.Name
-        })
+        var employees=await _context.Employees
+        .Include(e=>e.Department)
         .ToListAsync();
+
+        return _mapper.Map<List<EmployeeResponeDto>>(employees);
      
     }
 
+
+    
+
+
     public async Task<EmployeeResponeDto?> GetByIdAsync(int id)
     {
-        return await _context.Employees
-        .AsNoTracking()
-        .Where(e=>e.Id==id)
-        .Select(e=>new EmployeeResponeDto
-        {
-            Id=e.Id,
-            FirstName=e.FirstName,
-            LastName=e.LastName,
-            Email=e.Email,
-            Salary=e.Salary,
-            DepartmentId=e.DepartmentId,
-            DepartmentName=e.Department!.Name
-        }).FirstOrDefaultAsync();
+        var employee=await _context.Employees
+        .Include(e=>e.Department)
+        .FirstOrDefaultAsync(e=>e.Id==id);
+
+        return _mapper.Map<EmployeeResponeDto>(employee);
     }
 
     public async Task<Employee?> CreateAsync(CreateEmployeeDto dto)
@@ -63,15 +54,7 @@ public class EmployeeService: IEmployeeService
             return null;
         }
 
-        var employee=new Employee
-        {
-            FirstName=dto.FirstName,
-            LastName=dto.LastName,
-            Email=dto.Email,
-            Salary=dto.Salary,
-            DepartmentId=dto.DepartmentId
-
-        };
+        var employee=_mapper.Map<Employee>(dto);
 
     _context.Employees.Add(employee);
     await _context.SaveChangesAsync();
@@ -99,11 +82,13 @@ public class EmployeeService: IEmployeeService
             return false;
         }
 
-        employee.FirstName=dto.FirstName;
-        employee.LastName=dto.LastName;
-        employee.Email=dto.Email;
-        employee.Salary=dto.Salary;
-        employee.DepartmentId=dto.DepartmentId;
+        // employee.FirstName=dto.FirstName;
+        // employee.LastName=dto.LastName;
+        // employee.Email=dto.Email;
+        // employee.Salary=dto.Salary;
+        // employee.DepartmentId=dto.DepartmentId;
+
+        _mapper.Map(dto,employee);
 
         await _context.SaveChangesAsync();
         return true;
