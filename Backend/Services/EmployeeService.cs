@@ -64,6 +64,48 @@ public class EmployeeService : IEmployeeService
         .Include(e=>e.Department)
         .AsQueryable();
 
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            employeeQuery=employeeQuery.Where(e=>
+            e.FirstName.Contains(query.Search)||
+            e.LastName.Contains(query.Search)||
+            e.Email.Contains(query.Search));
+        }
+
+        if (!string.IsNullOrWhiteSpace(query.SortBy))
+        {
+            employeeQuery=query.SortBy.ToLower() switch
+            {
+                "firsname"=>query.SortOrder?.ToLower()=="desc"
+                ?employeeQuery.OrderByDescending(e=>e.FirstName)
+                :employeeQuery.OrderBy(e=>e.FirstName),
+
+                "lastname"=>query.SortOrder?.ToLower()=="desc"
+                ?employeeQuery.OrderByDescending(e=>e.LastName)
+                :employeeQuery.OrderBy(e=>e.LastName),
+
+                "email"=>query.SortOrder?.ToLower()=="desc"
+                ?employeeQuery.OrderByDescending(e=>e.Email)
+                :employeeQuery.OrderBy(e=>e.Email),
+
+                "salary"=>query.SortOrder?.ToLower()=="desc"
+                ?employeeQuery.OrderByDescending(e=>e.Salary)
+                :employeeQuery.OrderBy(e=>e.Salary),
+
+
+            };
+        }
+        else
+        {
+            employeeQuery=employeeQuery.OrderBy(e=>e.Id);
+        }
+
+        if (query.DepartmentId.HasValue)
+        {
+            employeeQuery=employeeQuery.Where(e=>
+            e.DepartmentId==query.DepartmentId.Value);
+        }
+
         var totalCount=await employeeQuery.CountAsync();
 
         var employees=await employeeQuery

@@ -9,6 +9,6 @@ public class UpdateEmployeeDto
 
     public string Email{get;set;}=string.Empty;
 
-    public string Salary{get;set;}=string.Empty;
+    public int Salary{get;set;}
     public int DepartmentId{get;set;}
 }

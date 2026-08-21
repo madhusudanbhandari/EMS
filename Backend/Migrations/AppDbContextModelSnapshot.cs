@@ -62,9 +62,8 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Salary")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
