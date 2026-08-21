@@ -127,6 +127,22 @@ public class AuthService: IAuthService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    public async Task<CurrentUserDto?> GetCurrentUserAsync(int userId)
+    {
+        var user=await _context.Users
+        .FirstOrDefaultAsync(u=>u.Id==userId);
+
+        if(user==null)
+        return null;
+
+        return new CurrentUserDto{
+            UserId=user.Id,
+            FullName=user.Name,
+            Email=user.Email,
+            Role=user.Role
+        };
+    }
+
 }
 
 

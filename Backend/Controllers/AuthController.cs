@@ -1,6 +1,8 @@
 
+using System.Security.Claims;
 using Backend.Dtos.Auth;
 using Backend.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controller;
@@ -42,6 +44,28 @@ public class AuthController : ControllerBase
         }
             return Ok(user);
       
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized();
+        }
+
+        var userId=int.Parse(userIdClaim.Value);
+
+        var user=await _authService.GetCurrentUserAsync(userId);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return Ok(user);
     }
 
 
