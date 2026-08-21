@@ -1,3 +1,4 @@
+using Backend.Dtos.Common;
 using Backend.Dtos.Employee;
 using Backend.Models;
 
@@ -5,7 +6,7 @@ namespace Backend.Interface;
 
 public interface IEmployeeService
 {
-    Task<IEnumerable<EmployeeResponeDto>> GetAllAsync();
+    Task<PagedResponse<EmployeeResponeDto>> GetAllAsync(QueryParameters query);
     Task<EmployeeResponeDto?>GetByIdAsync(int id);
     Task<Employee?>CreateAsync(CreateEmployeeDto dto);
     Task<bool> UpdateAsync(int id,UpdateEmployeeDto dto);

@@ -1,5 +1,3 @@
-
-
 using Backend.Dtos.Department;
 using Backend.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +7,11 @@ namespace Backend.Controller;
 [ApiController]
 [Route("api/[controller]")]
 
-public class DepartmentController : ControllerBase
+public class DepartmentsController : ControllerBase
 {
     private readonly IDepartmentService _departmentService;
 
-    public DepartmentController(IDepartmentService departmentService)
+    public DepartmentsController(IDepartmentService departmentService)
     {
         _departmentService=departmentService;
     }

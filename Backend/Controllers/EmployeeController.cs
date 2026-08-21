@@ -1,4 +1,5 @@
 
+using Backend.Dtos.Common;
 using Backend.Dtos.Employee;
 using Backend.Interface;
 using Backend.Models;
@@ -11,20 +12,20 @@ namespace Backend.Controller;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class EmployeeController : ControllerBase
+public class EmployeesController : ControllerBase
 {
     private readonly IEmployeeService _employeeService;
     
-    public EmployeeController(IEmployeeService employeeService)
+    public EmployeesController(IEmployeeService employeeService)
     {
         _employeeService=employeeService;
     }
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] QueryParameters query)
     {
-        var employees=await _employeeService.GetAllAsync();
+        var employees=await _employeeService.GetAllAsync(query);
         return Ok(employees);
     }
 
