@@ -11,4 +11,6 @@ public class UpdateEmployeeDto
 
     public int Salary{get;set;}
     public int DepartmentId{get;set;}
+
+    public IFormFile? ProfilePicture{get;set;}
 }

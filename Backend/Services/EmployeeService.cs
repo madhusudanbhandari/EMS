@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Backend.Dtos.Common;
 using Backend.Models.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Service;
 
@@ -244,6 +245,16 @@ public class EmployeeService : IEmployeeService
             return false;
         }
 
+        string? ProfilePicture=null;
+
+        if(dto.ProfilePicture!=null &&
+        dto.ProfilePicture.Length > 0)
+        {
+            ProfilePicture=await SaveProfilePictureAsync(
+                dto.ProfilePicture
+            );
+        }
+
 
         var employee=new Models.Employee
         {
@@ -252,7 +263,10 @@ public class EmployeeService : IEmployeeService
             Email=dto.Email,
             Salary=dto.Salary,
             DepartmentId=dto.DepartmentId,
-            UserId=userId
+            UserId=userId,
+            ProfilePicture=ProfilePicture
+
+            
 
 
         };
@@ -283,7 +297,8 @@ public class EmployeeService : IEmployeeService
             LastName=user.LastName,
             Email=user.Email,
             Salary=user.Salary,
-            DepartmentId=user.DepartmentId
+            DepartmentId=user.DepartmentId,
+            ProfilePicture=user.ProfilePicture,
             
 
         };
@@ -291,7 +306,7 @@ public class EmployeeService : IEmployeeService
       
     }
 
-    public async Task<bool> UpdateMyProfile(int userId, UpdateEmployeeProfileDto dto)
+    public async Task<bool> UpdateMyProfile(int userId, [FromForm]UpdateEmployeeProfileDto dto)
     {
         var employee=await _context.Employees
         .FirstOrDefaultAsync(e=>e.UserId==userId);
@@ -307,9 +322,73 @@ public class EmployeeService : IEmployeeService
         employee.Email=dto.Email;
         employee.DepartmentId=dto.DepartmentId;
 
+        if(dto.ProfilePicture!=null &&
+        dto.ProfilePicture.Length > 0)
+        {
+            var profilePicture=await SaveProfilePictureAsync(dto.ProfilePicture);
+
+            employee.ProfilePicture=profilePicture;
+
+
+        }
+
          await _context.SaveChangesAsync();
 
          return true;
 
+    }
+
+
+    //Image Saving Method
+
+    private async Task<string> SaveProfilePictureAsync(IFormFile file)
+    {
+        var allowedExtensions = new[]
+        {
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".webp"
+        };
+
+        var extension=Path.GetExtension(file.FileName)
+        .ToLowerInvariant();
+
+        if (!allowedExtensions.Contains(extension))
+        {
+            throw new ArgumentException(
+                "Only JPG, JPEG, PNG, and WEBP images are allowed"
+            );
+        }
+
+        const long maxFileSize=20*1024*1024;
+
+        if (file.Length > maxFileSize)
+        {
+            throw new ArgumentException("Profiles picture cannot exceed 5 MB");
+        }
+
+        var uploadsFolder=Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "wwwroot",
+            "uploads",
+            "profiles"
+        );
+
+        var fileName=$"{Guid.NewGuid()}{extension}";
+
+        var filePath=Path.Combine(
+            uploadsFolder,
+            fileName
+        );
+
+        await using var stream=new FileStream(
+            filePath,
+            FileMode.Create
+        );
+
+        await file.CopyToAsync(stream);
+
+        return $"/uploads/profiles/{fileName}";
     }
 }

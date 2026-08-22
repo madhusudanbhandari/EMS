@@ -11,4 +11,6 @@ public class EmployeeProfileDto
 
     public decimal Salary{get;set;}
     public int DepartmentId{get;set;}
+
+    public string? ProfilePicture{get;set;}
 }

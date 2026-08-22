@@ -14,4 +14,6 @@ public class CompleteEmployeeProfileDto
 
     public decimal Salary{get;set;}
     public int DepartmentId{get;set;}
+
+    public IFormFile? ProfilePicture{get;set;}
 }

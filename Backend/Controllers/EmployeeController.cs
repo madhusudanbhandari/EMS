@@ -91,7 +91,7 @@ public class EmployeesController : ControllerBase
 
     [Authorize(Roles ="Employee")]
     [HttpPost("complete-profile")]
-    public async Task<IActionResult> CompleteProfile( CompleteEmployeeProfileDto dto)
+    public async Task<IActionResult> CompleteProfile( [FromForm]CompleteEmployeeProfileDto dto)
     {
        var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
 
