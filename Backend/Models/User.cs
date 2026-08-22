@@ -1,4 +1,6 @@
 
+using Backend.Models.Enums;
+
 namespace Backend.Models;
 
 public class User
@@ -7,6 +9,10 @@ public class User
     public string Name{get;set;}=string.Empty;
     public string Email{get;set;}=string.Empty;
     public string PasswordHash{get;set;}=string.Empty;
-    public string Role{get;set;}="Employee";
+    public UserRole Role{get;set;}=UserRole.None;
+
+    public AccountStatus Status{get;set;}=AccountStatus.PendingApproval;
     public DateTime CreatedAt{get;set;}=DateTime.UtcNow;
+
+    public Employee? Employee{get;set;}
 }

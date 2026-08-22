@@ -12,4 +12,7 @@ public class Employee
     public decimal Salary{get;set;}
     public int DepartmentId{get;set;}
     public Department? Department{get;set;}
+
+    public int UserId{get;set;}
+    public User User{get;set;}=null!;
 }

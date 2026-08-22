@@ -68,6 +68,14 @@ builder.Services.AddScoped<IAuthService,AuthService>();
 
 var app=builder.Build();
 
+using(var scope = app.Services.CreateScope())
+{
+    var context=scope.ServiceProvider
+    .GetRequiredService<AppDbContext>();
+
+    await DbSeeder.SeedAdminAsync(context);
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

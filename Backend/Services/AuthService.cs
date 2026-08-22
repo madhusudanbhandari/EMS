@@ -45,7 +45,11 @@ public class AuthService: IAuthService
             Name=dto.Name,
             Email=dto.Email,
             PasswordHash=passwordHash,
-            Role="Employee"
+            
+            Role=Models.Enums.UserRole.None,
+            Status=Models.Enums.AccountStatus.PendingApproval,
+
+            CreatedAt=DateTime.UtcNow
         };
 
         _context.Users.Add(user);
@@ -55,7 +59,11 @@ public class AuthService: IAuthService
             UserId=user.Id,
             FullName=user.Name,
             Email=user.Email,
-            Role=user.Role
+            Status=user.Status,
+            Role=user.Role,
+            Message="Account Created. Waiting for admin Approval"
+            
+
             
         };
     }
@@ -108,7 +116,7 @@ public class AuthService: IAuthService
             new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Name),
             new Claim(ClaimTypes.Email,user.Email),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(ClaimTypes.Role, user.Role.ToString())
         };
 
 

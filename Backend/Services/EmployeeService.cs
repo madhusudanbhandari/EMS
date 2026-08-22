@@ -92,6 +92,7 @@ public class EmployeeService : IEmployeeService
                 ?employeeQuery.OrderByDescending(e=>e.Salary)
                 :employeeQuery.OrderBy(e=>e.Salary),
 
+                _ => employeeQuery.OrderBy(e => e.Id)
 
             };
         }
