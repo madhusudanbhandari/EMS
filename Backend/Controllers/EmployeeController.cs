@@ -1,4 +1,5 @@
 
+using System.Security.Claims;
 using Backend.Dtos.Common;
 using Backend.Dtos.Employee;
 using Backend.Interface;
@@ -88,6 +89,80 @@ public class EmployeesController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Roles ="Employee")]
+    [HttpPost("complete-profile")]
+    public async Task<IActionResult> CompleteProfile( CompleteEmployeeProfileDto dto)
+    {
+       var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
 
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User Id not founc");
+        }
+        if(!int.TryParse(userIdClaim.Value, out int Id))
+        {
+            return Unauthorized("Invalid usr Id");
+        }
+
+        var result=await _employeeService.CreateProfileAsync(Id,dto);
+
+        if (!result)
+        {
+           return BadRequest("Unable to create employee profile"); 
+        }
+
+        return Ok(new
+        {
+            message="Profile completed successfully"
+        });
+    }
+
+    [Authorize(Roles ="Employee")]
+    [HttpGet("my-profile")]
+    public async Task<IActionResult> GetMyProfile()
+    {
+        var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User not found");
+        }
+
+        if(!int.TryParse(userIdClaim.Value, out int Id))
+        {
+            return Unauthorized("Invalid user id");
+        }
+
+        var employeeProfile=await _employeeService.GetMyProfile(Id);
+
+        if (employeeProfile == null)
+        {
+            return NotFound("Employee profile not found");
+        }
+        return Ok(employeeProfile);
+    }
+
+    [Authorize(Roles ="Employee")]
+    [HttpPatch("update-profile")]
+    public async Task<IActionResult> UpdateMyProfile(UpdateEmployeeProfileDto dto)
+    {
+      var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User is not loggged");
+        }
+
+        if(!int.TryParse(userIdClaim.Value, out int Id))
+        {
+            return Unauthorized("User is not logged in");
+        }
+
+        var employee=await _employeeService.UpdateMyProfile(Id,dto);
+
+        return Ok(employee);
+
+
+    }
 
 }

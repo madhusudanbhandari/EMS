@@ -65,6 +65,7 @@ options.UseNpgsql(
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IEmployeeService,EmployeeService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 var app=builder.Build();
 

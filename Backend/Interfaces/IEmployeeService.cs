@@ -12,4 +12,10 @@ public interface IEmployeeService
     Task<bool> UpdateAsync(int id,UpdateEmployeeDto dto);
 
     Task<bool>DeleteAsync(int id);
+
+    Task<bool> CreateProfileAsync(int userId, CompleteEmployeeProfileDto dto);
+
+    Task<EmployeeProfileDto?> GetMyProfile(int userID);
+
+    Task<bool>UpdateMyProfile(int userId, UpdateEmployeeProfileDto dto);
 }

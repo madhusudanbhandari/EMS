@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Backend.Dtos.Common;
+using Backend.Models.Enums;
 
 namespace Backend.Service;
 
@@ -205,5 +206,110 @@ public class EmployeeService : IEmployeeService
         await _context.SaveChangesAsync();
 
         return true;
+    }
+
+    public async Task<bool> CreateProfileAsync(int userId,CompleteEmployeeProfileDto dto)
+    {
+        var user=await _context.Users
+        .FirstOrDefaultAsync(u=>u.Id==userId);
+
+        if (user == null)
+        {
+            return false;
+        }
+
+        if (user.Status != Models.Enums.AccountStatus.Approved)
+        {
+            return false;
+        }
+
+        if (user.Role != UserRole.Employee)
+        {
+           return false; 
+        }
+
+        var existingProfile=await _context.Employees
+        .FirstOrDefaultAsync(e=>e.UserId==userId);
+
+        if (existingProfile != null)
+        {
+            return false;
+        }
+
+        var departmentExists=await _context.Departments
+        .AnyAsync(d=>d.Id==dto.DepartmentId);
+
+        if (!departmentExists)
+        {
+            return false;
+        }
+
+
+        var employee=new Models.Employee
+        {
+            FirstName=dto.FirstName,
+            LastName=dto.LastName,
+            Email=dto.Email,
+            Salary=dto.Salary,
+            DepartmentId=dto.DepartmentId,
+            UserId=userId
+
+
+        };
+        _context.Employees.Add(employee);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+
+    public async Task<EmployeeProfileDto?> GetMyProfile(int userId)
+    {
+        var user=await _context.Employees
+        .FirstOrDefaultAsync(e=>e.UserId==userId);
+
+        // if (user == null)
+        // {
+        //     return BadRequest("Ple")
+        // }
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return new EmployeeProfileDto
+        {
+            FirstName=user.FirstName,
+            LastName=user.LastName,
+            Email=user.Email,
+            Salary=user.Salary,
+            DepartmentId=user.DepartmentId
+            
+
+        };
+
+      
+    }
+
+    public async Task<bool> UpdateMyProfile(int userId, UpdateEmployeeProfileDto dto)
+    {
+        var employee=await _context.Employees
+        .FirstOrDefaultAsync(e=>e.UserId==userId);
+
+        if (employee == null)
+        {
+            return false;
+        }
+
+        employee.FirstName=dto.FirstName;
+        employee.LastName=dto.LastName;
+        employee.Salary=dto.Salary;
+        employee.Email=dto.Email;
+        employee.DepartmentId=dto.DepartmentId;
+
+         await _context.SaveChangesAsync();
+
+         return true;
+
     }
 }
