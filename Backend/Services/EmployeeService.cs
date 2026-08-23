@@ -16,11 +16,14 @@ public class EmployeeService : IEmployeeService
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly ICacheService _cache;
 
-    public EmployeeService(AppDbContext context, IMapper mapper)
+    public EmployeeService(AppDbContext context, IMapper mapper,
+    ICacheService cache)
     {
         _context = context;
         _mapper = mapper;
+        _cache=cache;
     }
 
 
@@ -276,35 +279,77 @@ public class EmployeeService : IEmployeeService
     }
 
 
+    // public async Task<EmployeeProfileDto?> GetMyProfile(int userId)
+    // {
+    //     var user=await _context.Employees
+    //     .FirstOrDefaultAsync(e=>e.UserId==userId);
+
+    //   
+
+    //     if (user == null)
+    //     {
+    //         return null;
+    //     }
+
+    //     return new EmployeeProfileDto
+    //     {
+    //         FirstName=user.FirstName,
+    //         LastName=user.LastName,
+    //         Email=user.Email,
+    //         Salary=user.Salary,
+    //         DepartmentId=user.DepartmentId,
+    //         ProfilePicture=user.ProfilePicture,
+            
+
+    //     };
+
+      
+    // }
+
     public async Task<EmployeeProfileDto?> GetMyProfile(int userId)
     {
-        var user=await _context.Employees
+        var cacheKey=$"employee-profile:{userId}";
+
+        var cachedProfile=await _cache.GetAsync<EmployeeProfileDto>(cacheKey);
+
+        if (cachedProfile != null)
+        {
+            return cachedProfile;
+        }
+
+        var employee=await _context.Employees
         .FirstOrDefaultAsync(e=>e.UserId==userId);
 
-        // if (user == null)
-        // {
-        //     return BadRequest("Ple")
-        // }
-
-        if (user == null)
+        if (employee == null)
         {
             return null;
         }
 
-        return new EmployeeProfileDto
+        var profile=new EmployeeProfileDto
         {
-            FirstName=user.FirstName,
-            LastName=user.LastName,
-            Email=user.Email,
-            Salary=user.Salary,
-            DepartmentId=user.DepartmentId,
-            ProfilePicture=user.ProfilePicture,
-            
-
+            FirstName=employee.FirstName,
+            LastName=employee.LastName,
+            Email=employee.Email,
+            Salary=employee.Salary,
+            DepartmentId=employee.DepartmentId,
+            ProfilePicture=employee.ProfilePicture
         };
 
-      
+        await _cache.SetAsync(
+            cacheKey,
+            profile,
+            TimeSpan.FromMinutes(10)
+        );
+
+        return profile;
+
+
     }
+
+
+
+
+
 
     public async Task<bool> UpdateMyProfile(int userId, [FromForm]UpdateEmployeeProfileDto dto)
     {

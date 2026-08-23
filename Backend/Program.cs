@@ -67,6 +67,15 @@ builder.Services.AddScoped<IEmployeeService,EmployeeService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration=builder.Configuration.GetConnectionString("Redis");
+
+    options.InstanceName="EMS";
+});
+builder.Services.AddScoped<ICacheService,RedisCacheService>();
+
 var app=builder.Build();
 
 using(var scope = app.Services.CreateScope())

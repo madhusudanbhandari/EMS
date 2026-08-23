@@ -139,3 +139,6 @@
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/obj/Debug/net10.0/Backend.genruntimeconfig.cache
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/obj/Debug/net10.0/ref/Backend.dll
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Backend.staticwebassets.runtime.json
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Pipelines.Sockets.Unofficial.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/StackExchange.Redis.dll
