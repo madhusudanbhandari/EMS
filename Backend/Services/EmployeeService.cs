@@ -13,15 +13,17 @@ namespace Backend.Service;
 
 
 public class EmployeeService : IEmployeeService
-{
-    private readonly AppDbContext _context;
+{   
+    private readonly IEmployeeRepository _employeeRepository;
+
     private readonly IMapper _mapper;
     private readonly ICacheService _cache;
 
-    public EmployeeService(AppDbContext context, IMapper mapper,
+    public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper,
+
     ICacheService cache)
     {
-        _context = context;
+        _employeeRepository=employeeRepository;
         _mapper = mapper;
         _cache=cache;
     }
@@ -64,10 +66,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<PagedResponse<EmployeeResponeDto>> GetAllAsync(QueryParameters query)
     {
-        var employeeQuery=_context.Employees
-        .AsNoTracking()
-        .Include(e=>e.Department)
-        .AsQueryable();
+        var employeeQuery=await _employeeRepository.GetAllEmployeesAsync();
 
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
@@ -136,19 +135,15 @@ public class EmployeeService : IEmployeeService
     
     public async Task<EmployeeResponeDto?> GetByIdAsync(int id)
     {
-        var employee = await _context.Employees
-        .Include(e => e.Department)
-        .FirstOrDefaultAsync(e => e.Id == id);
-
+        var employee = await _employeeRepository.GetByIdAsync(id);
         return _mapper.Map<EmployeeResponeDto>(employee);
     }
     
 
     public async Task<Employee?> CreateAsync(CreateEmployeeDto dto)
     {
-        var departmentExists = await _context.Departments
-        .AnyAsync(d => d.Id == dto.DepartmentId);
-
+        var departmentExists = await _employeeRepository.DepartmentExistsAsync(dto.DepartmentId);
+        
         if (!departmentExists)
         {
             return null;
@@ -156,8 +151,8 @@ public class EmployeeService : IEmployeeService
 
         var employee = _mapper.Map<Employee>(dto);
 
-        _context.Employees.Add(employee);
-        await _context.SaveChangesAsync();
+         await _employeeRepository.AddAsync(employee);
+        await _employeeRepository.SaveChangesAsync();
         return employee;
 
 
@@ -165,8 +160,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> UpdateAsync(int id, UpdateEmployeeDto dto)
     {
-        var employee = await _context.Employees
-        .FirstOrDefaultAsync(e => e.Id == id);
+        var employee = await _employeeRepository.GetByIdAsync(id);
 
         if (employee == null)
         {
@@ -174,8 +168,7 @@ public class EmployeeService : IEmployeeService
 
         }
 
-        var existingDepartment = await _context.Departments
-        .AnyAsync(d => d.Id == dto.DepartmentId);
+        var existingDepartment = await _employeeRepository.DepartmentExistsAsync(dto.DepartmentId);
 
         if (!existingDepartment)
         {
@@ -190,7 +183,7 @@ public class EmployeeService : IEmployeeService
 
         _mapper.Map(dto, employee);
 
-        await _context.SaveChangesAsync();
+        await _employeeRepository.SaveChangesAsync();
         return true;
 
     }
@@ -198,24 +191,22 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var employee = await _context.Employees
-        .FirstOrDefaultAsync(e => e.Id == id);
+        var employee = await _employeeRepository.GetByIdAsync(id);
 
         if (employee == null)
         {
             return false;
         }
 
-        _context.Employees.Remove(employee);
-        await _context.SaveChangesAsync();
+        _employeeRepository.Remove(employee);
+        await _employeeRepository.SaveChangesAsync();
 
         return true;
     }
 
     public async Task<bool> CreateProfileAsync(int userId,CompleteEmployeeProfileDto dto)
     {
-        var user=await _context.Users
-        .FirstOrDefaultAsync(u=>u.Id==userId);
+        var user=await _employeeRepository.GetUserByIdAsync(userId);
 
         if (user == null)
         {
@@ -232,16 +223,14 @@ public class EmployeeService : IEmployeeService
            return false; 
         }
 
-        var existingProfile=await _context.Employees
-        .FirstOrDefaultAsync(e=>e.UserId==userId);
+        var existingProfile=await _employeeRepository.GetByIdAsync(User.Id);
 
         if (existingProfile != null)
         {
             return false;
         }
 
-        var departmentExists=await _context.Departments
-        .AnyAsync(d=>d.Id==dto.DepartmentId);
+        var departmentExists=await _employeeRepository.DepartmentExistsAsync(dto.DepartmentId);
 
         if (!departmentExists)
         {
@@ -273,8 +262,8 @@ public class EmployeeService : IEmployeeService
 
 
         };
-        _context.Employees.Add(employee);
-        await _context.SaveChangesAsync();
+        await _employeeRepository.AddAsync(employee);
+        await _employeeRepository.SaveChangesAsync();
         return true;
     }
 
@@ -317,8 +306,7 @@ public class EmployeeService : IEmployeeService
             return cachedProfile;
         }
 
-        var employee=await _context.Employees
-        .FirstOrDefaultAsync(e=>e.UserId==userId);
+        var employee=await _employeeRepository.GetByIdAsync(userId);
 
         if (employee == null)
         {
@@ -353,8 +341,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> UpdateMyProfile(int userId, [FromForm]UpdateEmployeeProfileDto dto)
     {
-        var employee=await _context.Employees
-        .FirstOrDefaultAsync(e=>e.UserId==userId);
+        var employee=await _employeeRepository.GetByIdAsync(userId);
 
         if (employee == null)
         {
@@ -377,7 +364,7 @@ public class EmployeeService : IEmployeeService
 
         }
 
-         await _context.SaveChangesAsync();
+         await _employeeRepository.SaveChangesAsync();
          await _cache.RemoveAsync($"employee-profile:{userId}");
          
 

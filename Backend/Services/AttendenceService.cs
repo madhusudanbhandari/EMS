@@ -3,6 +3,7 @@ using Backend.Dtos.Attendence;
 using Backend.Dtos.Auth;
 using Backend.Interface;
 using Backend.Models;
+using Backend.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
@@ -10,19 +11,17 @@ namespace Backend.Service;
 
 public class AttendenceService : IAttendenceService
 {
-    private readonly AppDbContext _context;
-
-    public AttendenceService(AppDbContext context)
+    private readonly IAttendenceRepository _attendenceRepository;
+    public AttendenceService(IAttendenceRepository attendenceRepository)
     {
-        _context=context;
+        _attendenceRepository=attendenceRepository;
 
     }
 
     public async Task<AttendenceResponseDto?>CheckInAsync(int userId)
     {
 
-        var employee=await _context.Employees
-        .FirstOrDefaultAsync(e=>e.UserId==userId);
+        var employee=await _attendenceRepository.GetEmployeeByUserIdAsync(userId);
 
         if (employee == null)
         {
@@ -30,9 +29,11 @@ public class AttendenceService : IAttendenceService
         }
         var today=DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var existingAttendence=await _context.Attendences
-        .FirstOrDefaultAsync(a=>a.EmployeeId==employee.Id &&
-        a.Date==today );
+        var existingAttendence=await _attendenceRepository.GetTodayAttendenceAsync(
+            employee.Id,
+            today
+        );
+
 
         if (existingAttendence != null)
         {
@@ -54,8 +55,8 @@ public class AttendenceService : IAttendenceService
         };
 
 
-        _context.Attendences.Add(attendence);
-        await _context.SaveChangesAsync();
+         await _attendenceRepository.AddAsync(attendence);
+         await _attendenceRepository.SaveChangesAsync();
 
         return new AttendenceResponseDto
         {
@@ -72,8 +73,7 @@ public class AttendenceService : IAttendenceService
 
     public async Task<AttendenceResponseDto?> CheckOutAsync(int userId)
     {
-        var employee=await _context.Employees
-        .FirstOrDefaultAsync(e=>e.UserId==userId);
+        var employee=await _attendenceRepository.GetEmployeeByUserIdAsync(userId);
 
         if (employee == null)
         {
@@ -82,10 +82,7 @@ public class AttendenceService : IAttendenceService
 
         var today=DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var attendence=await _context.Attendences
-        .FirstOrDefaultAsync(a=>
-        a.EmployeeId==employee.Id &&
-        a.Date==today);
+        var attendence=await _attendenceRepository.GetTodayAttendenceAsync(employee.Id,today);
 
         if (attendence == null)
         {
@@ -101,7 +98,7 @@ public class AttendenceService : IAttendenceService
 
         attendence.CheckOut=DateTime.UtcNow;
 
-        await _context.SaveChangesAsync();
+        await _attendenceRepository.SaveChangesAsync();
 
         return new AttendenceResponseDto
         {
@@ -116,19 +113,14 @@ public class AttendenceService : IAttendenceService
 
     public async Task<IEnumerable<AttendenceResponseDto>> GetMyAttendenceAsync(int userId)
     {
-        var employee=await _context.Employees
-        .FirstOrDefaultAsync(e=>e.UserId==userId);
+        var employee=await _attendenceRepository.GetEmployeeByUserIdAsync(userId);
 
         if (employee == null)
         {
             return Enumerable.Empty<AttendenceResponseDto>();
         }
 
-        var attendence=await _context.Attendences
-        .Where(a=>a.EmployeeId==employee.Id)
-        .OrderByDescending(a=>a.Date)
-        .ToListAsync();
-
+        var attendence=await _attendenceRepository.GetEmployeeAttendenceAsync(employee.Id);
         return attendence.Select(a=>new AttendenceResponseDto
         {
             Id=a.Id,
@@ -142,10 +134,7 @@ public class AttendenceService : IAttendenceService
 
     public async Task<IEnumerable<AttendenceResponseDto>> GetAllAttendenceAsync()
     {
-        var attendences=await _context.Attendences
-        .OrderByDescending(a=>a.Date)
-        .ThenByDescending(a=>a.CheckIn)
-        .ToListAsync();
+        var attendences=await _attendenceRepository.GetAllAttendencesAsync();
 
 
         return attendences.Select(a=>new AttendenceResponseDto

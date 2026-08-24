@@ -12,6 +12,7 @@ using FluentValidation.AspNetCore;
 using Backend.Middleware;
 using Microsoft.OpenApi;
 using Backend.Mappings;
+using Backend.Repository;
 
 var builder=WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,8 @@ builder.Services.AddScoped<IEmployeeService,EmployeeService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAttendenceService,AttendenceService>();
+
+builder.Services.AddScoped<IAttendenceRepository, AttendenceRepository>();
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
