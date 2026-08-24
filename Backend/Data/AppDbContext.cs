@@ -13,11 +13,23 @@ public class AppDbContext : DbContext
     public DbSet<Department> Departments{get;set;}
     public DbSet<User> Users{get;set;}
 
+    public DbSet<Attendence> Attendences{get;set;}
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
         .HasOne(u=>u.Employee)
         .WithOne(e=>e.User)
         .HasForeignKey<Employee>(e=>e.UserId);
+
+        modelBuilder.Entity<Attendence>()
+        .HasOne(a=>a.Employee)
+        .WithMany(e=>e.Attendences)
+        .HasForeignKey(a=>a.EmployeeId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Attendence>()
+        .HasIndex(a=>new {a.EmployeeId, a.Date})
+        .IsUnique();
     }
 }

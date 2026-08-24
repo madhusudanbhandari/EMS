@@ -378,6 +378,8 @@ public class EmployeeService : IEmployeeService
         }
 
          await _context.SaveChangesAsync();
+         await _cache.RemoveAsync($"employee-profile:{userId}");
+         
 
          return true;
 

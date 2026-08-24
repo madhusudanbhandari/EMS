@@ -17,4 +17,6 @@ public class Employee
     public User User{get;set;}=null!;
 
     public string? ProfilePicture{get;set;}
+
+    public ICollection<Attendence> Attendences{get;set;}=new List<Attendence>();
 }

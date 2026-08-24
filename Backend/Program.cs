@@ -66,7 +66,7 @@ builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IEmployeeService,EmployeeService>();
 builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
-
+builder.Services.AddScoped<IAttendenceService,AttendenceService>();
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
@@ -74,6 +74,18 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
     options.InstanceName="EMS";
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactFrontend", policy =>
+    {
+        policy
+        .WithOrigins("http://localhost:5173")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddScoped<ICacheService,RedisCacheService>();
 
 var app=builder.Build();
@@ -93,6 +105,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseCors("ReactFrontend");
 
 app.UseMiddleware<ExceptionMiddleware>();
 
