@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users{get;set;}
 
     public DbSet<Attendence> Attendences{get;set;}
+    public DbSet<Leave> Leaves{get;set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

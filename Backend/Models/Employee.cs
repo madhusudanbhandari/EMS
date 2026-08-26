@@ -19,4 +19,5 @@ public class Employee
     public string? ProfilePicture{get;set;}
 
     public ICollection<Attendence> Attendences{get;set;}=new List<Attendence>();
+    public ICollection<Leave> Leaves{get;set;}=new List<Leave>();
 }
