@@ -89,4 +89,74 @@ public class AttendenceController: ControllerBase
         return Ok(attendences);
     }
 
+    [Authorize(Roles ="Employee")]
+    [HttpGet("my-attendence/range")]
+    public async Task<IActionResult> MyAttendenceByDateRange(
+        [FromQuery] DateOnly startDate,
+        [FromQuery] DateOnly endDate
+    )
+    {
+        var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User not logged inn");
+        }
+
+        if(!int.TryParse(userIdClaim.Value, out int Id))
+        {
+            return Unauthorized("Invalid user");
+        }
+
+        if (startDate > endDate)
+        {
+            return BadRequest(
+                "Start date cannot be after the end date"
+            );
+        }
+
+        var attendence=await _attendenceService.
+        GetMyAttendenceByDateRangeAsync(Id,
+        startDate,
+        endDate);
+
+        return Ok(attendence);
+    }
+
+    [Authorize(Roles ="Employee")]
+    [HttpGet("my-attendence/summary")]
+
+    public async Task<IActionResult> MyAttendenceSummary(
+        [FromQuery] DateOnly startDate,
+        [FromQuery] DateOnly endDate
+    )
+    {
+        var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User not logged in");
+        }
+
+        if(!int.TryParse(userIdClaim.Value,out int Id))
+        {
+            return Unauthorized("Invalid user");
+        }
+
+        if (startDate >endDate)
+        {
+            return BadRequest(
+                "Start date cannot be after end date"
+            );
+        }
+
+        var summary=await _attendenceService
+        .GetMyAttendenceSummaryAsync(
+            Id,
+            startDate,
+            endDate
+        );
+        return Ok(summary);
+    }
+
 }

@@ -147,4 +147,90 @@ public class AttendenceService : IAttendenceService
             Status=a.Status.ToString()
         });
     }
+
+    public async Task<IEnumerable<AttendenceResponseDto>> GetMyAttendenceByDateRangeAsync(
+        int userId,
+        DateOnly startDate,
+        DateOnly endDate
+    )
+    {
+        var employee=await _attendenceRepository.GetEmployeeByUserIdAsync(userId);
+
+        if (employee == null)
+        {
+            return Enumerable.Empty<AttendenceResponseDto>();
+        }
+
+        var attendences=
+        await _attendenceRepository.
+        GetEmployeeAttendenceByDateRangeAsync(
+            employee.Id,
+            startDate,
+            endDate
+        );
+
+        return attendences.Select(a=>new AttendenceResponseDto
+        {
+            Id=a.Id,
+            EmployeeId=a.EmployeeId,
+            Date=a.Date,
+            CheckIn=a.CheckIn,
+            CheckOut=a.CheckOut,
+            Status=a.Status.ToString()
+        });
+        
+    }
+
+    public async Task<AttendenceSummaryDto> GetMyAttendenceSummaryAsync(
+        int userId,
+        DateOnly startDate,
+        DateOnly endDate
+    )
+    {
+        var employee=await _attendenceRepository.
+        GetEmployeeByUserIdAsync(userId);
+
+        if (employee == null)
+        {
+            return new AttendenceSummaryDto();
+        }
+
+        var attendences=await _attendenceRepository
+        .GetEmployeeAttendenceByDateRangeAsync(
+            employee.Id,
+            startDate,
+            endDate
+        );
+
+        var attendenceList=attendences.ToList();
+
+        var presentDays=attendenceList.Count(
+            a=>a.Status==Models.Enums.AttendenceStatus.Present
+        );
+
+        // var absentDays=attendenceList.Count(
+        //     a=>a.Status==Models.Enums.AttendenceStatus.Absent
+        // );
+
+        var lateDays=attendenceList.Count(
+            a=>a.Status==Models.Enums.AttendenceStatus.Late
+        );
+
+        double totalWorkingHours=attendenceList.
+        Where(a=>a.CheckOut.HasValue)
+        .Sum(a=>(a.CheckOut!.Value-a.CheckIn).TotalHours);
+
+  
+
+        return new AttendenceSummaryDto
+        {
+            TotalDays=attendenceList.Count,
+            PresentDays=presentDays,
+            AbsentDays=0,
+            LateDays=lateDays,
+            TotalWorkingHours=Math.Round(
+                totalWorkingHours,2
+            )
+        };
+    }
 }

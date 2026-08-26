@@ -70,6 +70,7 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IAttendenceService,AttendenceService>();
 
 builder.Services.AddScoped<IAttendenceRepository, AttendenceRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {

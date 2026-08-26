@@ -9,4 +9,16 @@ public interface IAttendenceService
     Task<IEnumerable<AttendenceResponseDto>> GetMyAttendenceAsync(int userId);
     Task<IEnumerable<AttendenceResponseDto>> GetAllAttendenceAsync();
 
+    Task<IEnumerable<AttendenceResponseDto>> GetMyAttendenceByDateRangeAsync(
+        int userId,
+        DateOnly startDate,
+        DateOnly endDate
+    );
+
+    Task<AttendenceSummaryDto>GetMyAttendenceSummaryAsync(
+        int userId,
+        DateOnly startDate,
+        DateOnly endDate
+    );
+
 }

@@ -66,7 +66,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<PagedResponse<EmployeeResponeDto>> GetAllAsync(QueryParameters query)
     {
-        var employeeQuery=await _employeeRepository.GetAllEmployeesAsync();
+        var employeeQuery= _employeeRepository.GetAllEmployeesAsync();
 
         if (!string.IsNullOrWhiteSpace(query.Search))
         {
@@ -223,7 +223,7 @@ public class EmployeeService : IEmployeeService
            return false; 
         }
 
-        var existingProfile=await _employeeRepository.GetByIdAsync(User.Id);
+        var existingProfile=await _employeeRepository.GetByUserIdAsync(userId);
 
         if (existingProfile != null)
         {
@@ -306,7 +306,7 @@ public class EmployeeService : IEmployeeService
             return cachedProfile;
         }
 
-        var employee=await _employeeRepository.GetByIdAsync(userId);
+        var employee=await _employeeRepository.GetByUserIdAsync(userId);
 
         if (employee == null)
         {
@@ -341,7 +341,7 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> UpdateMyProfile(int userId, [FromForm]UpdateEmployeeProfileDto dto)
     {
-        var employee=await _employeeRepository.GetByIdAsync(userId);
+        var employee=await _employeeRepository.GetByUserIdAsync(userId);
 
         if (employee == null)
         {

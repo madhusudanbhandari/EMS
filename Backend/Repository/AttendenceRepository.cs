@@ -36,11 +36,40 @@ public class AttendenceRepository: IAttendenceRepository
         .ToListAsync();
     }
 
+    public async Task<IEnumerable<Attendence>> GetEmployeeAttendenceByDateRangeAsync(
+        int employeeId,
+        DateOnly startDate,
+        DateOnly endDate
+    )
+    {
+        return await _context.Attendences
+        .Where(a=>
+        a.EmployeeId==employeeId &&
+        a.Date>=startDate &&
+        a.Date<=endDate)
+        .OrderByDescending(a=>a.Date)
+        .ToListAsync();
+    }
+
     public async Task<IEnumerable<Attendence>> GetAllAttendencesAsync()
     {
         return await _context.Attendences
         .OrderByDescending(a=>a.Date)
         .ThenByDescending(a=>a.CheckIn)
+        .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Attendence>> GetAllAttendenceByDateRangeAsync(
+        DateOnly startDate,
+        DateOnly endDate
+    )
+    {
+        return await _context.Attendences
+        .AsNoTracking()
+        .Where(a=>
+            a.Date>=startDate &&
+            a.Date<=endDate)
+        .OrderByDescending(a=>a.Date)
         .ToListAsync();
     }
 

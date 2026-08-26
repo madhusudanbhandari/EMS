@@ -12,7 +12,18 @@ public interface IAttendenceRepository
         int employeeId
     );
 
+    Task<IEnumerable<Attendence>> GetEmployeeAttendenceByDateRangeAsync(
+        int employeeId,
+        DateOnly startDate,
+        DateOnly endDate
+    );
+
     Task<IEnumerable<Attendence>> GetAllAttendencesAsync();
+
+    Task<IEnumerable<Attendence>> GetAllAttendenceByDateRangeAsync(
+        DateOnly startDate,
+        DateOnly endDate
+    );
     Task AddAsync(Attendence attendence);
 
     Task SaveChangesAsync();

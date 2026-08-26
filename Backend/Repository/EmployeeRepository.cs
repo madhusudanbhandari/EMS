@@ -38,6 +38,12 @@ public class EmployeeRepository : IEmployeeRepository
        
     }
 
+    public async Task<Employee?> GetByUserIdAsync(int userId)
+    {
+        return await _context.Employees
+        .FirstOrDefaultAsync(e=>e.UserId==userId);
+    }
+
     public async Task<User?> GetUserByIdAsync(int userId)
     {
         return await _context.Users
