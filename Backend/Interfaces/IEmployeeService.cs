@@ -18,4 +18,6 @@ public interface IEmployeeService
     Task<EmployeeProfileDto?> GetMyProfile(int userID);
 
     Task<bool>UpdateMyProfile(int userId, UpdateEmployeeProfileDto dto);
+
+    Task<LeaveResponseDto?> ApplyLeave(int userId,ApplyLeaveDto dto);
 }

@@ -1,13 +1,13 @@
 using Backend.Models.Enums;
-namespace Backend.Models;
-public class Leave
+
+namespace Backend.Dtos.Employee;
+public class LeaveResponseDto
 {
-    public int Id{get;set;}
-    public int EmployeeId{get;set;}
-    public Employee Employee{get;set;}=null!;
     public string LeaveType {get;set;}=string.Empty;
-    public DateOnly StartDate{get;set;}
-    public DateOnly EndDate{get;set;}   
+    public DateOnly startDate{get;set;}
+    public DateOnly endDate{get;set;}   
+
+    public string EmployeeName{get;set;}=string.Empty;
     public string Reason{get;set;}=string.Empty;
     public LeaveStatus Status{get;set;}
     public DateTime AppliedAt{get;set;}

@@ -50,16 +50,24 @@ public class EmployeeRepository : IEmployeeRepository
         .FirstOrDefaultAsync(u=>u.Id==userId);
     }
 
+
+
+
     public async Task AddAsync(Employee employee)
     {
         await _context.Employees.AddAsync(employee);
     }
+
 
     public void Remove(Employee employee)
     {
         _context.Employees.Remove(employee);
     }
 
+    public async Task AddLeaveAsync(Leave leave)
+    {
+        _context.Leaves.Add(leave);
+    }
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();

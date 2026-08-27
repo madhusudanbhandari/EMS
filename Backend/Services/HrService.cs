@@ -2,6 +2,7 @@
 using Backend.Data;
 using Backend.Dtos.HR;
 using Backend.Interface;
+using Backend.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Service;
@@ -25,13 +26,19 @@ public class HrService:IHrService
             Id=l.Id,
             Status=l.Status,
             EmployeeId=l.EmployeeId,
-            startDate=l.startDate,
-            endDate=l.endDate
+            EmployeeName=l.Employee.FirstName+" "+l.Employee.LastName,
+            startDate=l.StartDate,
+            endDate=l.EndDate,
+            LeaveType=l.LeaveType,
+            Reason=l.Reason,
+            AppliedAt=l.AppliedAt
+
+            
 
         }).ToListAsync();        
     }
 
-    public async Task<bool> ApproveLeave(int leaveId,string status)
+    public async Task<bool> ApproveLeave(int leaveId,int reviewerId)
     {
         var leaveRequest=await _context.Leaves
         .FirstOrDefaultAsync(l=>l.Id==leaveId);
@@ -41,17 +48,19 @@ public class HrService:IHrService
             return false;
         }
 
-        if (leaveRequest.Status != Models.Enums.LeaveStatus.Pending)
+        if (leaveRequest.Status != LeaveStatus.Pending)
         {
              return false;
         }
 
-        leaveRequest.Status=Models.Enums.LeaveStatus.Approved;
+        leaveRequest.Status=LeaveStatus.Approved;
+        leaveRequest.ReviewedBy=reviewerId;
+        leaveRequest.ReviewedAt=DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return true;
     }
 
-    public async Task<bool> RejectLeave(int leaveId,string status)
+    public async Task<bool> RejectLeave(int leaveId, int reviewerId)
     {
         var leaveRequest=await _context.Leaves
         .FirstOrDefaultAsync(l=>l.Id==leaveId);
@@ -59,8 +68,18 @@ public class HrService:IHrService
         if (leaveRequest == null)
         {
             return false;
-            
+
         }
+
+        if (leaveRequest.Status != Models.Enums.LeaveStatus.Pending)
+        {
+            return false;
+        }
+        leaveRequest.Status=Models.Enums.LeaveStatus.Rejected;
+        leaveRequest.ReviewedBy=reviewerId;
+        leaveRequest.ReviewedAt=DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        return true;
     }
 
 }

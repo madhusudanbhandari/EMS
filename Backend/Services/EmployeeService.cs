@@ -425,4 +425,48 @@ public class EmployeeService : IEmployeeService
 
         return $"/uploads/profiles/{fileName}";
     }
+
+
+    public async Task<LeaveResponseDto?> ApplyLeave(int userId, ApplyLeaveDto dto)
+    {
+        var employee=await _employeeRepository.GetByUserIdAsync(userId);
+
+        if (employee == null)
+        {
+            throw new Exception("User not logged in");
+        }
+
+        if (dto.startDate > dto.endDate)
+        {
+            throw new InvalidOperationException("Start date cant be after end date");
+        }
+
+        var newLeave= new Leave
+        {
+            LeaveType=dto.LeaveType,
+            StartDate=dto.startDate,
+            EmployeeId=employee.Id,
+            EndDate=dto.endDate,
+            Reason=dto.Reason,
+
+        };
+
+        var result=new LeaveResponseDto
+        {
+            EmployeeName=employee.FirstName,
+            LeaveType=newLeave.LeaveType,
+            startDate=newLeave.StartDate,
+            endDate=newLeave.EndDate,
+            Reason=newLeave.Reason,
+            Status=LeaveStatus.Pending,
+            AppliedAt=DateTime.UtcNow,
+            
+
+        };
+
+        await _employeeRepository.AddLeaveAsync(newLeave);
+        await _employeeRepository.SaveChangesAsync();
+        return result;        
+
+    }
 }

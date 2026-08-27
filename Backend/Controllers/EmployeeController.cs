@@ -144,7 +144,7 @@ public class EmployeesController : ControllerBase
 
     [Authorize(Roles ="Employee")]
     [HttpPatch("update-profile")]
-    public async Task<IActionResult> UpdateMyProfile(UpdateEmployeeProfileDto dto)
+    public async Task<IActionResult> UpdateMyProfile([FromForm]UpdateEmployeeProfileDto dto)
     {
       var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -163,6 +163,23 @@ public class EmployeesController : ControllerBase
         return Ok(employee);
 
 
+    }
+    [Authorize(Roles ="Employee")]
+    [HttpPost("apply-leave")]
+    public async Task<IActionResult> ApplyLeave(ApplyLeaveDto dto)
+    {
+        var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User is not logged in");
+        }
+        if(!int.TryParse(userIdClaim.Value, out int Id))
+        {
+            return Unauthorized("User not logged in");
+        }
+
+        var leave=await _employeeService.ApplyLeave(Id,dto);
+        return Ok(leave);
     }
 
 }

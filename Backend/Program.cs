@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Interface;
-using Backend.Models;
 using Backend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -71,6 +70,7 @@ builder.Services.AddScoped<IAttendenceService,AttendenceService>();
 
 builder.Services.AddScoped<IAttendenceRepository, AttendenceRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IHrService, HrService>();
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
