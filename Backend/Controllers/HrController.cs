@@ -13,9 +13,11 @@ namespace Backend.Controller;
 public class HrController : ControllerBase
 {
     private readonly IHrService _hrService;
-    public HrController(IHrService hrService)
+    private readonly IEmployeeService _employeeService;
+    public HrController(IHrService hrService,IEmployeeService employeeService)
     {
         _hrService=hrService;
+        _employeeService=employeeService;
     }
 
     [Authorize(Roles ="HR")]
@@ -64,6 +66,14 @@ public class HrController : ControllerBase
 
         var result=await _hrService.RejectLeave(dto.Id,Id);
         return Ok(result);
+    }
+
+    [Authorize(Roles ="HR")]
+    [HttpGet("employee-leave-history")]
+    public async Task<IActionResult> GetEmployeeLeaveHistory(int userId)
+    {
+        var leaveHistory= await _employeeService.GetAllMyLeavesAsync(userId);
+        return Ok(leaveHistory);
     }
 
 }

@@ -32,5 +32,11 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Attendence>()
         .HasIndex(a=>new {a.EmployeeId, a.Date})
         .IsUnique();
+
+        modelBuilder.Entity<Leave>()
+        .HasOne(l=>l.Reviewer)
+        .WithMany()
+        .HasForeignKey(l=>l.ReviewedBy)
+        .OnDelete(DeleteBehavior.Restrict);
     }
 }

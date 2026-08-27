@@ -1,4 +1,5 @@
 
+using Backend.Dtos.Employee;
 using Backend.Models;
 
 namespace Backend.Interface;
@@ -15,6 +16,7 @@ public interface IEmployeeRepository
     Task AddAsync(Employee employee);
 
     Task AddLeaveAsync(Leave leave);
+    Task<IEnumerable<LeaveHistoryDto>>GetAllMyLeavesAsync(int userId);
     void Remove(Employee employee);
     Task SaveChangesAsync();
 

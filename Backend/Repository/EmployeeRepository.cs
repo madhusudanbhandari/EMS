@@ -1,6 +1,7 @@
 
 
 using Backend.Data;
+using Backend.Dtos.Employee;
 using Backend.Interface;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -63,10 +64,31 @@ public class EmployeeRepository : IEmployeeRepository
     {
         _context.Employees.Remove(employee);
     }
-
     public async Task AddLeaveAsync(Leave leave)
     {
         _context.Leaves.Add(leave);
+    }
+     public async Task <IEnumerable<LeaveHistoryDto>> GetAllMyLeavesAsync(int employeeId)
+    {
+        return await _context.Leaves
+        .AsNoTracking()
+        .Where(l=>l.Employee.UserId==employeeId)
+        .Select(l=>new LeaveHistoryDto
+        {
+            Id=l.Id,
+            LeaveType=l.LeaveType,
+            StartDate=l.StartDate,
+            EndDate=l.EndDate,
+            Reason=l.Reason,
+            Status=l.Status,
+            AppliedAt=l.AppliedAt,
+            ReviewedAt=l.ReviewedAt,
+            ReviewerName=l.Reviewer !=null
+            ?l.Reviewer.Name
+            : "not reviewd"
+
+        }).ToListAsync();
+        
     }
     public async Task SaveChangesAsync()
     {

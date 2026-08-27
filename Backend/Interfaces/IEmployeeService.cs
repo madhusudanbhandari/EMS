@@ -20,4 +20,5 @@ public interface IEmployeeService
     Task<bool>UpdateMyProfile(int userId, UpdateEmployeeProfileDto dto);
 
     Task<LeaveResponseDto?> ApplyLeave(int userId,ApplyLeaveDto dto);
+    Task<IEnumerable<LeaveHistoryDto>> GetAllMyLeavesAsync(int userId); 
 }

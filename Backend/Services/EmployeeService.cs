@@ -469,4 +469,9 @@ public class EmployeeService : IEmployeeService
         return result;        
 
     }
+
+    public async Task<IEnumerable<LeaveHistoryDto>> GetAllMyLeavesAsync(int userId)
+    {
+        return await _employeeRepository.GetAllMyLeavesAsync(userId);
+    }
 }

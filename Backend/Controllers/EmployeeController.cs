@@ -182,4 +182,25 @@ public class EmployeesController : ControllerBase
         return Ok(leave);
     }
 
+    [Authorize(Roles ="Employee")]
+    [HttpGet("my-leaves")]
+    public async Task<IActionResult> GetAllLeaves()
+    {
+        var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User not logged in yet");
+        }
+
+        if(!int.TryParse(userIdClaim.Value, out int Id))
+        {
+            return Unauthorized("User not logged in");
+        }
+
+        var leaves= await _employeeService.GetAllMyLeavesAsync(Id);
+
+        return Ok(leaves);
+    }
+
 }

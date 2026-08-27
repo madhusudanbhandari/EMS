@@ -1,4 +1,6 @@
 using Backend.Dtos.Department;
+using Backend.Dtos.Employee;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Backend.Interface;
 
