@@ -10,4 +10,6 @@ public interface IHrService
 
     Task<bool>RejectLeave(int leaveId,int userId);
 
+    Task<PayrollResponseDto> CreatePayroll(int employeeId,CreatePayrollDto dto);
+
 }

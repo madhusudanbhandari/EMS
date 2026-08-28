@@ -76,4 +76,12 @@ public class HrController : ControllerBase
         return Ok(leaveHistory);
     }
 
+    [Authorize(Roles ="HR")]
+    [HttpPost("create-payroll")]
+    public async Task<IActionResult> CreatePayroll(int employeeId,CreatePayrollDto dto)
+    {
+        var payroll=await _hrService.CreatePayroll(employeeId,dto);
+        return Ok(payroll);
+    }
+
 }

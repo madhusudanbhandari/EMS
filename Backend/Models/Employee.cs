@@ -20,4 +20,5 @@ public class Employee
 
     public ICollection<Attendence> Attendences{get;set;}=new List<Attendence>();
     public ICollection<Leave> Leaves{get;set;}=new List<Leave>();
+    public ICollection<Payroll>Payrolls{get;set;}=new List<Payroll>();
 }

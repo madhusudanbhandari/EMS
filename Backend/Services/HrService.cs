@@ -2,6 +2,7 @@
 using Backend.Data;
 using Backend.Dtos.HR;
 using Backend.Interface;
+using Backend.Models;
 using Backend.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,12 @@ namespace Backend.Service;
 public class HrService:IHrService
 {
     private readonly AppDbContext _context;
+    private readonly IEmployeeRepository _employeeRepository;
 
-    public HrService(AppDbContext context)
+    public HrService(AppDbContext context, IEmployeeRepository employeeRepository)
     {
         _context=context;
+        _employeeRepository=employeeRepository;
     }
 
     public async Task<IEnumerable<PendingLeaveDto>> GetAllLeaveRequests()
@@ -80,6 +83,50 @@ public class HrService:IHrService
         leaveRequest.ReviewedAt=DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<PayrollResponseDto> CreatePayroll(int employeeId,CreatePayrollDto dto)
+    {
+        var employee=_employeeRepository.GetByUserIdAsync(employeeId);
+
+        if (employee== null)
+        {
+            throw new Exception("Employee does not exists");
+        }
+
+        var payroll=new Payroll
+        {
+            
+            EmployeeId=employee.Id,
+            PayrollPeriod=dto.PayrollPeriod,
+            BaseSalary=dto.BaseSalary,
+            Overtime=dto.Overtime,
+            Bonus=dto.Bonus,
+            GrossSalary=dto.GrossSalary,
+            TotalDeductions=dto.TotalDeductions,
+            NetSalary=dto.NetSalary,
+
+            Status=SalaryStatus.pending,
+            ProcessedAt=DateTime.UtcNow,
+        };
+
+        _context.Payrolls.Add(payroll);
+        await _context.SaveChangesAsync();
+
+        return new PayrollResponseDto
+        {
+            Id=payroll.Id,
+            EmployeeId=payroll.EmployeeId,
+            PayrollPeriod=payroll.PayrollPeriod,
+            BaseSalary=payroll.BaseSalary,
+            Overtime=payroll.Overtime,
+            Bonus=payroll.Bonus,
+            GrossSalary=payroll.GrossSalary,
+            TotalDeductions=payroll.TotalDeductions,
+            NetSalary=payroll.NetSalary,
+            Status=payroll.Status,
+            ProcessedAt=payroll.ProcessedAt,
+        };
     }
 
 }
