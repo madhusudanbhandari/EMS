@@ -17,8 +17,14 @@ public class AppDbContext : DbContext
     public DbSet<Leave> Leaves{get;set;}
     public DbSet<Payroll> Payrolls{get;set;}
 
+    public DbSet<Message> Messages{get;set;}
+    public DbSet<Conversation> Conversations {get;set;}
+    public DbSet<ConversationParticipant>ConversationParticipants{get;set;} 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.Entity<User>()
         .HasOne(u=>u.Employee)
         .WithOne(e=>e.User)
@@ -39,5 +45,17 @@ public class AppDbContext : DbContext
         .WithMany()
         .HasForeignKey(l=>l.ReviewedBy)
         .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<ConversationParticipant>()
+        .HasOne(cp=>cp.Conversation)
+        .WithMany(c=>c.Participants)
+        .HasForeignKey(cp=>cp.ConversationId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Message>()
+        .HasOne(m=>m.Conversation)
+        .WithMany(c=>c.Messages)
+        .HasForeignKey(m=>m.ConversationId)
+        .OnDelete(DeleteBehavior.Cascade);
     }
 }

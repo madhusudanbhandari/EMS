@@ -12,6 +12,7 @@ using Backend.Middleware;
 using Microsoft.OpenApi;
 using Backend.Mappings;
 using Backend.Repository;
+using Backend.Hub;
 
 var builder=WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             )
         )
     };
-});
+    options.Events=new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken=context.Request.Query["access_token"];
+
+            var path=context.HttpContext.Request.Path;
+
+            if(!string.IsNullOrEmpty(accessToken)&&
+            path.StartsWithSegments("/ChatHub"))
+            {
+                context.Token=accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
+}
+
+);
+
+builder.Services.AddSignalR();
+
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(cfg=>{},typeof(MappingProfile));
@@ -117,5 +139,8 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllers();
+app.MapHub<ChatHub>("/ChatHub");
+
 app.Run();
