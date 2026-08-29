@@ -203,4 +203,27 @@ public class EmployeesController : ControllerBase
         return Ok(leaves);
     }
 
+    [Authorize(Roles ="Employee")]
+    [HttpGet("my-payroll")]
+    public async Task<IActionResult> GetMyPayroll()
+    {
+        var userIdClaim=User.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (userIdClaim == null)
+        {
+            return Unauthorized("User is not logged in");
+        }
+
+        if(!int.TryParse(userIdClaim.Value,out int Id))
+        {
+            return Unauthorized("User not logged in");
+        }
+
+        
+
+        var payroll=await _employeeService.GetMyPayroll(Id);
+
+        return Ok(payroll);
+    }
+
 }

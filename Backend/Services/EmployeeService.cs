@@ -474,4 +474,12 @@ public class EmployeeService : IEmployeeService
     {
         return await _employeeRepository.GetAllMyLeavesAsync(userId);
     }
+
+    public async Task<IEnumerable<MyPayrollDto>> GetMyPayroll(int useId)
+    {
+        return await _employeeRepository.GetMyPayroll(useId);
+
+    }
+
+
 }

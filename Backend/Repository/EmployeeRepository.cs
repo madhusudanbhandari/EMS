@@ -2,6 +2,7 @@
 
 using Backend.Data;
 using Backend.Dtos.Employee;
+using Backend.Dtos.HR;
 using Backend.Interface;
 using Backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -90,10 +91,33 @@ public class EmployeeRepository : IEmployeeRepository
         }).ToListAsync();
         
     }
+
+    public async Task<IEnumerable<MyPayrollDto>> GetMyPayroll(int userId)
+    {
+        
+
+        return await _context.Payrolls
+        .AsNoTracking()
+        .Where(p=>p.Employee.UserId==userId)
+        .Select(p=>new MyPayrollDto
+        {
+            Id=p.Id,
+            PayrollPeriod=p.PayrollPeriod,
+            BaseSalary=p.BaseSalary,
+            Overtime=p.Overtime,
+            Bonus=p.Bonus,
+            GrossSalary=p.GrossSalary,
+            TotalDeductions=p.TotalDeductions,
+            NetSalary=p.NetSalary,
+            Status=Models.Enums.SalaryStatus.released,
+            ProcessedAt=p.ProcessedAt
+        }
+       ).ToListAsync();
+    }
+
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();
     }
-
 
 }

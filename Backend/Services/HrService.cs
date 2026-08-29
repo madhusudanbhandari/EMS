@@ -87,7 +87,7 @@ public class HrService:IHrService
 
     public async Task<PayrollResponseDto> CreatePayroll(int employeeId,CreatePayrollDto dto)
     {
-        var employee=_employeeRepository.GetByUserIdAsync(employeeId);
+        var employee= await _employeeRepository.GetByIdAsync(employeeId);
 
         if (employee== null)
         {

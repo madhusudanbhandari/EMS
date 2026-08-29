@@ -17,6 +17,7 @@ public interface IEmployeeRepository
 
     Task AddLeaveAsync(Leave leave);
     Task<IEnumerable<LeaveHistoryDto>>GetAllMyLeavesAsync(int userId);
+    Task<IEnumerable<MyPayrollDto>> GetMyPayroll(int userId);
     void Remove(Employee employee);
     Task SaveChangesAsync();
 

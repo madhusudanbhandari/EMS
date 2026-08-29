@@ -21,4 +21,6 @@ public interface IEmployeeService
 
     Task<LeaveResponseDto?> ApplyLeave(int userId,ApplyLeaveDto dto);
     Task<IEnumerable<LeaveHistoryDto>> GetAllMyLeavesAsync(int userId); 
+
+    Task<IEnumerable<MyPayrollDto>> GetMyPayroll(int userId);
 }
