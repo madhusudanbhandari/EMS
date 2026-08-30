@@ -94,6 +94,9 @@ builder.Services.AddScoped<IAttendenceRepository, AttendenceRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IHrService, HrService>();
 
+builder.Services.AddScoped<IChatRepository,ChatRepository>();
+builder.Services.AddScoped<IChatService,ChatService>();
+
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration=builder.Configuration.GetConnectionString("Redis");
