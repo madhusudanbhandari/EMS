@@ -4,6 +4,13 @@ namespace Backend.Interface;
 
 public interface IChatService
 {
+    Task AddParticipantAsync(
+        int conversationId,
+        int userId
+    );
+
+
+
     Task<ConversationResponseDto> CreateConversationAsync(
         int currentUserId,
         CreateConversationDto dto

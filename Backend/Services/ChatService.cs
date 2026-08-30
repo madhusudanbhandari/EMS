@@ -1,18 +1,22 @@
 
 
+using Backend.Data;
 using Backend.Dtos.Chat;
 using Backend.Interface;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Service;
 
 public class ChatService : IChatService
 {
     private readonly IChatRepository _chatRepository;
-    public ChatService(IChatRepository chatRepository)
+    private readonly AppDbContext _context;
+    public ChatService(IChatRepository chatRepository,AppDbContext context)
     {
         _chatRepository=chatRepository;
+        _context=context;
     }
 
     public async Task<ConversationResponseDto>CreateConversationAsync(int currentUserId, CreateConversationDto dto)
@@ -108,6 +112,45 @@ public class ChatService : IChatService
             throw new UnauthorizedAccessException("You are not participant in this conversation");
         }
     }
+
+    public async Task AddParticipantAsync(
+        int conversationId,
+        int userId
+    )
+    {
+        var conversationExists=await _context.Conversations
+        .AnyAsync(c=>c.Id==conversationId);
+
+        if (!conversationExists)
+        {
+            throw new KeyNotFoundException("Conversation not found");
+        }
+
+        var userExists=await _context.Users
+        .AnyAsync(u=>u.Id==userId);
+
+        if (!userExists)
+        {
+            throw new KeyNotFoundException("User not found");
+        }
+
+        var alreadyParticipant=await _context.ConversationParticipants
+        .AnyAsync(cp=>cp.ConversationId==conversationId && cp.UserId==userId);
+
+        if (alreadyParticipant)
+        {
+            throw new InvalidOperationException("User is already a participant in this conversation");
+        }
+
+        var participant=new ConversationParticipant
+        {
+            ConversationId=conversationId,
+            UserId=userId
+        };
+        await _context.ConversationParticipants.AddAsync(participant);
+        await _context.SaveChangesAsync();
+    }
+
 
     public async Task<MessageResponseDto> SendMessageAsync(
         int currentUserId,

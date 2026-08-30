@@ -64,6 +64,32 @@ public class ChatController : ControllerBase
         }
     }
 
+    [HttpPost("conversations/{conversationId}/participants")]
+    public async Task<IActionResult> AddParticipant(
+        int conversationId,
+        AddParticipantDto dto
+    )
+    {
+        try
+        {
+            await _chatService.AddParticipantAsync(
+                conversationId,
+                dto.UserId
+            );
+
+            return Ok(
+                new
+                {
+                    message="Participant added successfully"
+                }
+            );
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+    }
+
     [HttpPost("conversations/{conversationId}/messages")]
 
     public async Task<IActionResult> SendMessage(

@@ -30,6 +30,8 @@ public class ChatHub : global::Microsoft.AspNetCore.SignalR.Hub
 
     public async Task JoinConversation(int conversationId)
     {
+        
+        
         await _chatService.JoinConversationAsync(
             currentUserId,
             conversationId
@@ -62,7 +64,7 @@ public class ChatHub : global::Microsoft.AspNetCore.SignalR.Hub
         );
 
         await Clients
-        .Group(GetConversationGroupName(conversationId))
+        .OthersInGroup(GetConversationGroupName(conversationId))
         .SendAsync(
             "ReceiveMessage",
             message
