@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Backend.Data;
 public static class DbSeeder
 {
-    public  static async Task SeedAdminAsync(AppDbContext context)
+    public  static async Task SeedAdminAsync(AppDbContext context,IConfiguration Configuration)
     {
         var adminExist=await context.Users
         .AnyAsync(u=>u.Role==UserRole.Admin);
@@ -18,11 +18,14 @@ public static class DbSeeder
             return;
         }
 
+        var adminEmail=Configuration["SeedAdmin:Email"];
+        var adminPassword=Configuration["SeedAdmin:Password"];
+
         var admin=new User
         {
             Name="Madhusudan Bhandari",
-            Email="madhusudanb636@gmail.com",
-            PasswordHash=BCrypt.Net.BCrypt.HashPassword("madhu@123"),
+            Email=adminEmail ?? throw new InvalidOperationException("SeedAdmin:Email is not configured."),
+            PasswordHash=BCrypt.Net.BCrypt.HashPassword(adminPassword),
             Role=UserRole.Admin,
             Status=AccountStatus.Approved,
             CreatedAt=

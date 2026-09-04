@@ -124,7 +124,7 @@ using(var scope = app.Services.CreateScope())
     var context=scope.ServiceProvider
     .GetRequiredService<AppDbContext>();
 
-    await DbSeeder.SeedAdminAsync(context);
+    await DbSeeder.SeedAdminAsync(context,builder.Configuration);
 }
 
 if (app.Environment.IsDevelopment())
