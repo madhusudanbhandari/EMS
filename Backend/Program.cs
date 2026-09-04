@@ -13,10 +13,39 @@ using Microsoft.OpenApi;
 using Backend.Mappings;
 using Backend.Repository;
 using Backend.Hub;
+using Serilog;
+
+
 
 var builder=WebApplication.CreateBuilder(args);
 
+
+// Log.Logger=new LoggerConfiguration()
+//            .WriteTo.Console()
+//             .WriteTo.File(
+//                 "Logs/log-.txt",
+//                 rollingInterval:RollingInterval.Day
+//             )
+//             .CreateLogger();
+
+builder.Services.AddSerilog((services, LoggerConfiguration) =>
+{
+    LoggerConfiguration
+    .ReadFrom.Configuration(builder.Configuration)
+    .ReadFrom.Services(services);
+});
+
 builder.Services.AddControllers();
+
+builder.Logging.Configure(options =>
+{
+    options.ActivityTrackingOptions=
+        ActivityTrackingOptions.TraceId|
+        ActivityTrackingOptions.SpanId|
+        ActivityTrackingOptions.ParentId;
+});
+
+
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -118,6 +147,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<ICacheService,RedisCacheService>();
 
 var app=builder.Build();
+
+app.UseSerilogRequestLogging();
 
 using(var scope = app.Services.CreateScope())
 {

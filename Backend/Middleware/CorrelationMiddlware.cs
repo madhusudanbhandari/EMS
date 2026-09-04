@@ -1,4 +1,6 @@
 
+using Microsoft.Net.Http.Headers;
+
 namespace Backend.Middleware;
 
 public class CorrelationMiddleware
@@ -6,6 +8,7 @@ public class CorrelationMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<CorrelationMiddleware> _logger;
 
+    private const string HeaderName="X-Correlation-ID";
     public CorrelationMiddleware(RequestDelegate next, ILogger<CorrelationMiddleware> logger)
     {
         _next=next;
@@ -14,7 +17,7 @@ public class CorrelationMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var correlationId=context.Request.Headers["X-Correlation-ID"]
+        var correlationId=context.Request.Headers[HeaderName]
                         .FirstOrDefault();
 
         if (string.IsNullOrEmpty(correlationId))
@@ -24,14 +27,9 @@ public class CorrelationMiddleware
 
         context.Items["CorrelationId"]=correlationId;
 
-        context.Response.Headers["X-Correlation-ID"]=correlationId;
+        context.Response.Headers[HeaderName]=correlationId;
 
-        using(_logger.BeginScope(
-            new Dictionary<string, object>
-            {
-                ["CorrelationId"]=correlationId
-            }
-        ))
+        using(_logger.BeginScope("CorrelationId:{CorrelationId}",correlationId))
         {
         await _next(context);
   

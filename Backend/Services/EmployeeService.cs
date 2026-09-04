@@ -152,7 +152,8 @@ public class EmployeeService : IEmployeeService
         _logger.LogInformation(
             "Retrieving employee with Id {EmployeeId}",
             id
-        );
+              
+        );   ///structured logging =creates the property called EmployeeId not just displays the information
 
         var employee = await _employeeRepository.GetByIdAsync(id);
 

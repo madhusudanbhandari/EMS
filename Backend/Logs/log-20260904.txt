@@ -1,0 +1,124 @@
+2026-09-04 18:57:58.550 +05:45 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Role" = 3)
+2026-09-04 18:57:58.613 +05:45 [INF] User profile is available. Using '/Users/madhusudanbhandari/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2026-09-04 18:57:58.630 +05:45 [INF] Now listening on: http://localhost:5062
+2026-09-04 18:57:58.630 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-04 18:57:58.630 +05:45 [INF] Hosting environment: Development
+2026-09-04 18:57:58.630 +05:45 [INF] Content root path: /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend
+2026-09-04 18:58:20.464 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5062/swagger/index.html - null null
+2026-09-04 18:58:20.501 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5062/swagger/index.html - 200 null text/html;charset=utf-8 38.1604ms
+2026-09-04 18:58:20.873 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5062/swagger/index.js - null null
+2026-09-04 18:58:20.875 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5062/swagger/index.css - null null
+2026-09-04 18:58:20.875 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5062/swagger/swagger-ui.css - null null
+2026-09-04 18:58:20.875 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5062/swagger/swagger-ui-standalone-preset.js - null null
+2026-09-04 18:58:20.875 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5062/swagger/index.js - 304 null null 2.5981ms
+2026-09-04 18:58:20.875 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5062/swagger/swagger-ui-bundle.js - null null
+2026-09-04 18:58:20.881 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5062/swagger/swagger-ui.css - 304 null null 6.0793ms
+2026-09-04 18:58:20.881 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5062/swagger/index.css - 304 null null 6.251ms
+2026-09-04 18:58:20.881 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5062/swagger/swagger-ui-standalone-preset.js - 304 null null 5.9113ms
+2026-09-04 18:58:20.887 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5062/swagger/swagger-ui-bundle.js - 304 null null 11.3177ms
+2026-09-04 18:58:20.962 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5062/swagger/v1/swagger.json - null null
+2026-09-04 18:58:21.035 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5062/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 73.5757ms
+2026-09-04 18:58:44.901 +05:45 [INF] Request starting HTTP/1.1 POST http://localhost:5062/api/Auth/login - application/json 68
+2026-09-04 18:58:44.905 +05:45 [WRN] Failed to determine the https port for redirect.
+2026-09-04 18:58:44.905 +05:45 [INF] CORS policy execution failed.
+2026-09-04 18:58:44.906 +05:45 [INF] Request origin http://localhost:5062 does not have permission to access the resource.
+2026-09-04 18:58:44.931 +05:45 [INF] Executing endpoint 'Backend.Controller.AuthController.Login (Backend)'
+2026-09-04 18:58:44.940 +05:45 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Backend.Dtos.Auth.LoginDto) on controller Backend.Controller.AuthController (Backend).
+2026-09-04 18:58:44.984 +05:45 [INF] Executed DbCommand (3ms) [Parameters=[@dto_Email='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."CreatedAt", u."Email", u."Name", u."PasswordHash", u."Role", u."Status"
+FROM "Users" AS u
+WHERE u."Email" = @dto_Email
+LIMIT 1
+2026-09-04 18:58:45.180 +05:45 [INF] Executing OkObjectResult, writing value of type 'Backend.Dtos.Auth.AuthResponseDto'.
+2026-09-04 18:58:45.184 +05:45 [INF] Executed action Backend.Controller.AuthController.Login (Backend) in 242.9309ms
+2026-09-04 18:58:45.184 +05:45 [INF] Executed endpoint 'Backend.Controller.AuthController.Login (Backend)'
+2026-09-04 18:58:45.185 +05:45 [INF] Request finished HTTP/1.1 POST http://localhost:5062/api/Auth/login - 200 null application/json; charset=utf-8 283.802ms
+2026-09-04 18:59:07.183 +05:45 [INF] Request starting HTTP/1.1 GET http://localhost:5062/api/Employees - null null
+2026-09-04 18:59:07.212 +05:45 [INF] Executing endpoint 'Backend.Controller.EmployeesController.GetAll (Backend)'
+2026-09-04 18:59:07.217 +05:45 [INF] Route matched with {action = "GetAll", controller = "Employees"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(Backend.Dtos.Common.QueryParameters) on controller Backend.Controller.EmployeesController (Backend).
+2026-09-04 18:59:07.246 +05:45 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-09-04 18:59:07.249 +05:45 [INF] Retrieving employees. Page1,PageSize:3
+2026-09-04 18:59:07.279 +05:45 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Employees" AS e
+2026-09-04 18:59:07.300 +05:45 [INF] Executed DbCommand (1ms) [Parameters=[@p1='?' (DbType = Int32), @p='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT e0."Id", e0."DepartmentId", e0."Email", e0."FirstName", e0."LastName", e0."ProfilePicture", e0."Salary", e0."UserId", d."Id", d."Name"
+FROM (
+    SELECT e."Id", e."DepartmentId", e."Email", e."FirstName", e."LastName", e."ProfilePicture", e."Salary", e."UserId"
+    FROM "Employees" AS e
+    ORDER BY e."Id"
+    LIMIT @p1 OFFSET @p
+) AS e0
+INNER JOIN "Departments" AS d ON e0."DepartmentId" = d."Id"
+ORDER BY e0."Id"
+2026-09-04 18:59:07.306 +05:45 [INF] Executing OkObjectResult, writing value of type 'Backend.Dtos.Common.PagedResponse`1[[Backend.Dtos.Employee.EmployeeResponeDto, Backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-09-04 18:59:07.308 +05:45 [INF] Executed action Backend.Controller.EmployeesController.GetAll (Backend) in 90.8608ms
+2026-09-04 18:59:07.308 +05:45 [INF] Executed endpoint 'Backend.Controller.EmployeesController.GetAll (Backend)'
+2026-09-04 18:59:07.308 +05:45 [INF] Request finished HTTP/1.1 GET http://localhost:5062/api/Employees - 200 null application/json; charset=utf-8 125.5017ms
+2026-09-04 19:02:07.412 +05:45 [INF] Application is shutting down...
+2026-09-04 19:15:22.715 +05:45 [INF] Now listening on: http://localhost:5062
+2026-09-04 19:15:22.733 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-04 19:15:22.733 +05:45 [INF] Hosting environment: Development
+2026-09-04 19:15:22.733 +05:45 [INF] Content root path: /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend
+2026-09-04 19:15:27.420 +05:45 [WRN] Failed to determine the https port for redirect.
+2026-09-04 19:15:27.475 +05:45 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-09-04 19:15:27.481 +05:45 [INF] Retrieving employees. Page1,PageSize:3
+2026-09-04 20:10:57.454 +05:45 [INF] Application is shutting down...
+2026-09-04 20:12:21.383 +05:45 [INF] Now listening on: http://localhost:5062
+2026-09-04 20:12:21.401 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-04 20:12:21.401 +05:45 [INF] Hosting environment: Development
+2026-09-04 20:12:21.401 +05:45 [INF] Content root path: /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend
+2026-09-04 20:13:49.175 +05:45 [WRN] Failed to determine the https port for redirect.
+2026-09-04 20:13:49.265 +05:45 [ERR] Unhandled exception occured while processing POST /api/Attendence/check-in with CorrelationId bd4e512e-0dff-4c67-9eab-6d806ae5e2c5
+System.InvalidOperationException: Employee has already checked in today
+   at Backend.Service.AttendenceService.CheckInAsync(Int32 userId) in /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/Services/AttendenceService.cs:line 40
+   at Backend.Controller.AttendenceController.CheckIn() in /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/Controllers/AttendenceController.cs:line 38
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Backend.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/Middleware/ExceptionMiddleware.cs:line 20
+2026-09-04 20:13:49.274 +05:45 [ERR] HTTP POST /api/Attendence/check-in responded 500 in 108.0563 ms
+2026-09-04 20:14:00.434 +05:45 [INF] Application is shutting down...
+2026-09-04 20:14:04.529 +05:45 [INF] Now listening on: http://localhost:5062
+2026-09-04 20:14:04.547 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-04 20:14:04.547 +05:45 [INF] Hosting environment: Development
+2026-09-04 20:14:04.547 +05:45 [INF] Content root path: /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend
+2026-09-04 20:14:05.630 +05:45 [INF] HTTP GET /swagger/index.html responded 200 in 25.7711 ms
+2026-09-04 20:14:05.995 +05:45 [INF] HTTP GET /swagger/index.js responded 304 in 1.2803 ms
+2026-09-04 20:14:05.998 +05:45 [INF] HTTP GET /swagger/index.css responded 304 in 4.3875 ms
+2026-09-04 20:14:05.998 +05:45 [INF] HTTP GET /swagger/swagger-ui.css responded 304 in 4.6088 ms
+2026-09-04 20:14:05.999 +05:45 [INF] HTTP GET /swagger/swagger-ui-standalone-preset.js responded 304 in 4.8083 ms
+2026-09-04 20:14:06.003 +05:45 [INF] HTTP GET /swagger/swagger-ui-bundle.js responded 304 in 8.9172 ms
+2026-09-04 20:14:06.123 +05:45 [INF] HTTP GET /swagger/v1/swagger.json responded 200 in 46.2333 ms
+2026-09-04 20:14:17.401 +05:45 [INF] Application is shutting down...
+2026-09-04 20:14:26.850 +05:45 [INF] Now listening on: http://localhost:5062
+2026-09-04 20:14:26.868 +05:45 [INF] Application started. Press Ctrl+C to shut down.
+2026-09-04 20:14:26.868 +05:45 [INF] Hosting environment: Development
+2026-09-04 20:14:26.868 +05:45 [INF] Content root path: /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend
+2026-09-04 20:14:32.029 +05:45 [INF] HTTP GET /swagger/index.html responded 200 in 26.4062 ms
+2026-09-04 20:14:32.037 +05:45 [INF] HTTP GET /swagger/index.js responded 304 in 0.4845 ms
+2026-09-04 20:14:32.039 +05:45 [INF] HTTP GET /swagger/index.css responded 304 in 3.3298 ms
+2026-09-04 20:14:32.039 +05:45 [INF] HTTP GET /swagger/swagger-ui.css responded 304 in 2.7473 ms
+2026-09-04 20:14:32.039 +05:45 [INF] HTTP GET /swagger/swagger-ui-standalone-preset.js responded 304 in 2.9414 ms
+2026-09-04 20:14:32.042 +05:45 [INF] HTTP GET /swagger/swagger-ui-bundle.js responded 304 in 5.1537 ms
+2026-09-04 20:14:32.100 +05:45 [INF] HTTP GET /swagger/v1/swagger.json responded 200 in 38.0260 ms
+2026-09-04 20:14:53.744 +05:45 [WRN] Failed to determine the https port for redirect.
+2026-09-04 20:14:54.014 +05:45 [INF] HTTP POST /api/Auth/login responded 200 in 273.1538 ms
+2026-09-04 20:15:15.640 +05:45 [WRN] You do not have a valid license key for the Lucky Penny software AutoMapper. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-09-04 20:15:15.642 +05:45 [INF] Retrieving employees. Page1,PageSize:3
+2026-09-04 20:15:15.705 +05:45 [INF] HTTP GET /api/Employees responded 200 in 125.0073 ms
+2026-09-04 20:15:17.950 +05:45 [INF] Retrieving employees. Page1,PageSize:3
+2026-09-04 20:15:17.954 +05:45 [INF] HTTP GET /api/Employees responded 200 in 10.0126 ms
+2026-09-04 20:16:07.367 +05:45 [INF] Application is shutting down...

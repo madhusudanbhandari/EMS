@@ -142,3 +142,12 @@
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Pipelines.Sockets.Unofficial.dll
 /Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/StackExchange.Redis.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.AspNetCore.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.Extensions.Hosting.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.Extensions.Logging.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.Formatting.Compact.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.Settings.Configuration.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.Sinks.Console.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.Sinks.Debug.dll
+/Users/madhusudanbhandari/Desktop/EMS/EMS/Backend/bin/Debug/net10.0/Serilog.Sinks.File.dll
