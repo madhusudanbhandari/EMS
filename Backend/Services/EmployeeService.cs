@@ -19,13 +19,16 @@ public class EmployeeService : IEmployeeService
     private readonly IMapper _mapper;
     private readonly ICacheService _cache;
 
+    private readonly ILogger<EmployeeService> _logger;
+
     public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper,
 
-    ICacheService cache)
+    ICacheService cache,ILogger<EmployeeService> logger)
     {
         _employeeRepository=employeeRepository;
         _mapper = mapper;
         _cache=cache;
+        _logger=logger;
     }
 
 
@@ -66,6 +69,12 @@ public class EmployeeService : IEmployeeService
 
     public async Task<PagedResponse<EmployeeResponeDto>> GetAllAsync(QueryParameters query)
     {
+        _logger.LogInformation(
+            "Retrieving employees. Page{Page},PageSize:{PageSize}",
+            query.Page,
+            query.PageSize);
+        
+
         var employeeQuery= _employeeRepository.GetAllEmployeesAsync();
 
         if (!string.IsNullOrWhiteSpace(query.Search))
@@ -78,6 +87,11 @@ public class EmployeeService : IEmployeeService
 
         if (!string.IsNullOrWhiteSpace(query.SortBy))
         {
+            _logger.LogInformation(
+                "Searching employees with search term:{SearchTerm}",
+                query.Search
+            );
+
             employeeQuery=query.SortBy.ToLower() switch
             {
                 "firsname"=>query.SortOrder?.ToLower()=="desc"
@@ -135,23 +149,50 @@ public class EmployeeService : IEmployeeService
     
     public async Task<EmployeeResponeDto?> GetByIdAsync(int id)
     {
+        _logger.LogInformation(
+            "Retrieving employee with Id {EmployeeId}",
+            id
+        );
+
         var employee = await _employeeRepository.GetByIdAsync(id);
+
+        if (employee == null)
+        {
+            _logger.LogWarning("Employee with Id{employeeId} was not found",id);
+            
+        }
+
         return _mapper.Map<EmployeeResponeDto>(employee);
     }
     
 
     public async Task<Employee?> CreateAsync(CreateEmployeeDto dto)
     {
+
+    _logger.LogInformation(
+        "Creating employee with email {Email} for department {DepartmentId}",
+        dto.Email,
+        dto.DepartmentId);
+
         var departmentExists = await _employeeRepository.DepartmentExistsAsync(dto.DepartmentId);
         
         if (!departmentExists)
         {
+            _logger.LogWarning(
+            "Employee creation failed because department {DepartmentId} does not exist",
+            dto.DepartmentId);
+
             return null;
         }
 
         var employee = _mapper.Map<Employee>(dto);
 
-         await _employeeRepository.AddAsync(employee);
+        _logger.LogInformation(
+        "Employee created successfully with ID {EmployeeId}",
+        employee.Id);
+
+
+        await _employeeRepository.AddAsync(employee);
         await _employeeRepository.SaveChangesAsync();
         return employee;
 
@@ -160,10 +201,14 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> UpdateAsync(int id, UpdateEmployeeDto dto)
     {
+        _logger.LogInformation("Updating the employee with id {EmployeeId}",id);
+        
         var employee = await _employeeRepository.GetByIdAsync(id);
 
         if (employee == null)
-        {
+        {   
+            _logger.LogWarning("Employee with the id {EmployeeId} is not found",id);
+
             return false;
 
         }
@@ -172,6 +217,8 @@ public class EmployeeService : IEmployeeService
 
         if (!existingDepartment)
         {
+            _logger.LogWarning("Cannot update the employee {EmployeeId} .Department {DepartmentId} does not exist",id,dto.DepartmentId);
+
             return false;
         }
 
@@ -191,15 +238,24 @@ public class EmployeeService : IEmployeeService
 
     public async Task<bool> DeleteAsync(int id)
     {
+        _logger.LogInformation("Deleting the employee {EmployeeId}",id);
+
         var employee = await _employeeRepository.GetByIdAsync(id);
 
         if (employee == null)
         {
+            _logger.LogWarning("Cannot delete the employee. Employee {EmployeeId} was not found",id);
+
             return false;
         }
 
         _employeeRepository.Remove(employee);
         await _employeeRepository.SaveChangesAsync();
+
+        _logger.LogInformation(
+            "Employee {EmployeeId} deleted successfully",
+            id
+        );
 
         return true;
     }

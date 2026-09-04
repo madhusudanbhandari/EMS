@@ -137,6 +137,8 @@ app.UseStaticFiles();
 
 app.UseCors("ReactFrontend");
 
+app.UseMiddleware<CorrelationMiddleware>();
+
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthentication();
