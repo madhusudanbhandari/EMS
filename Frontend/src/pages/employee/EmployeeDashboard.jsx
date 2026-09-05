@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
+
+
 import {
     getMyProfile,
     updateMyProfile,
 } from "../../api/employeeApi";
 
 function EmployeeDashboard() {
+    const {logout}=useAuth();
+
 
     const [profile, setProfile] = useState(null);
 
@@ -83,6 +88,14 @@ function EmployeeDashboard() {
             setError("");
             setSuccess("");
 
+            console.log("Profile data being sent:", {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                salary: Number(formData.salary),
+                departmentId: Number(formData.departmentId)
+            });
+
             await updateMyProfile({
                 firstName: formData.firstName,
                 lastName: formData.lastName,
@@ -91,6 +104,7 @@ function EmployeeDashboard() {
                 departmentId: Number(formData.departmentId),
             });
 
+1
             setSuccess("Profile updated successfully.");
 
             await loadProfile();
@@ -114,12 +128,7 @@ function EmployeeDashboard() {
         }
     };
 
-    const handleLogout = () => {
-
-        localStorage.removeItem("token");
-
-        window.location.href = "/login";
-    };
+    
 
     if (loading) {
 
@@ -172,12 +181,7 @@ function EmployeeDashboard() {
 
                     </div>
 
-                    <button
-                        onClick={handleLogout}
-                        className="px-4 py-2 rounded-lg border border-red-200 text-red-600 text-sm font-medium hover:bg-red-50"
-                    >
-                        Logout
-                    </button>
+                    
 
                 </div>
 

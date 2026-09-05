@@ -12,6 +12,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
+import { ROLES } from "./constants/roles";
+import MainLayout from "./components/layout/MainLayout";
 
 function App() {
 
@@ -43,15 +45,24 @@ function App() {
                 <Route
                     path="/admin"
                     element={
-                        <ProtectedRoute role={3}>
-                            <AdminDashboard />
+                        <ProtectedRoute role={ROLES.ADMIN}>
+                            <MainLayout>
+                                <AdminDashboard />
+                            </MainLayout>
                         </ProtectedRoute>
                     }
                 />
 
                 <Route
-                    path="/employee"
-                    element={<EmployeeDashboard />}
+                path="/employee"
+                element={
+                    <ProtectedRoute role={ROLES.EMPLOYEE}>
+                        <MainLayout>
+                            <EmployeeDashboard/>
+                        </MainLayout>
+                        
+                    </ProtectedRoute>
+                }
                 />
 
             </Routes>
