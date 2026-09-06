@@ -8,12 +8,16 @@ import Register from "./pages/auth/Register";
 import Login from "./pages/auth/login";
 import Unauthorized from "./pages/auth/Unauthorized";
 
-import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard";
 import { ROLES } from "./constants/roles";
 import MainLayout from "./components/layout/MainLayout";
+import Employees from "./pages/admin/Employees";
+
+import Dashboard from "./pages/admin/Dashboard";
+import Departments from "./pages/admin/Departments";
+import Users from "./pages/admin/Users";
 
 function App() {
 
@@ -47,11 +51,43 @@ function App() {
                     element={
                         <ProtectedRoute role={ROLES.ADMIN}>
                             <MainLayout>
-                                <AdminDashboard />
+                                <Dashboard />
                             </MainLayout>
                         </ProtectedRoute>
                     }
                 />
+                 <Route
+                    path="/admin/employees"
+                    element={
+                        <ProtectedRoute role={ROLES.ADMIN}>
+                            <MainLayout>
+                                <Employees />
+                            </MainLayout>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/departments"
+                    element={
+                        <ProtectedRoute role={ROLES.ADMIN}>
+                            <MainLayout>
+                                <Departments/>
+                            </MainLayout>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                path="/admin/users"
+                element={
+                    <ProtectedRoute role={ROLES.ADMIN}>
+                        <MainLayout>
+                            <Users />
+                        </MainLayout>
+                    </ProtectedRoute>
+                }
+            />
 
                 <Route
                 path="/employee"

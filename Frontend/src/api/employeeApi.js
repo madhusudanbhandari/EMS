@@ -1,40 +1,52 @@
-import { data } from "react-router-dom";
 import api from "./axios";
 
-export const getMyProfile=async()=>{
-    const response=await api.get("/Employees/my-profile");
-    return response.data;
-}
-
-export const completeMyProfile=async(profileData)=>{
-    const response=await api.post(
-        "Employees/complete-profile",
-        profileData,{
-            headers:{"Content-Type":"application/json"}
-        }
-    );
+export const getMyProfile = async () => {
+    const response = await api.get("/Employees/my-profile");
     return response.data;
 };
 
-export const updateMyProfile=async(profilData)=>{
-    const formData=new FormData();
+export const completeMyProfile = async (profileData) => {
+    const response = await api.post(
+        "/Employees/complete-profile",
+        profileData,
+        {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
 
-    formData.append("FirstName",profilData.firstName);
-    formData.append("LastName",profilData.lastName);
-    formData.append("Email",profilData.email);
-    formData.append("Salary",profilData.salary);
-    formData.append("DepartmentId",profilData.departmentId);
+    return response.data;
+};
 
-    if(profilData.profilePicture){
-        formData.append("ProfilePicture",profilData.profilePicture);
+export const updateMyProfile = async (profileData) => {
+    const formData = new FormData();
+
+    formData.append("FirstName", profileData.firstName);
+    formData.append("LastName", profileData.lastName);
+    formData.append("Email", profileData.email);
+    formData.append("Salary", profileData.salary);
+    formData.append("DepartmentId", profileData.departmentId);
+
+    if (profileData.profilePicture) {
+        formData.append(
+            "ProfilePicture",
+            profileData.profilePicture
+        );
     }
 
-
-
-    const response=await api.patch(
-        "Employees/update-profile",
+    const response = await api.patch(
+        "/Employees/update-profile",
         formData
     );
 
     return response.data;
-}
+};
+
+export const getEmployees = async (params = {}) => {
+    const response = await api.get("/Employees", {
+        params
+    });
+
+    return response.data;
+};
