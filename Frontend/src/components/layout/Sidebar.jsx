@@ -14,10 +14,7 @@ function Sidebar() {
                 name: "Dashboard",
                 path: "/employee",
             },
-            {
-                name: "My Profile",
-                path: "/employee/profile",
-            },
+          
             {
                 name: "Leave",
                 path: "/employee/leave",
@@ -80,10 +77,7 @@ function Sidebar() {
                 name: "Departments",
                 path: "/admin/departments",
             },
-            {
-                name: "Roles",
-                path: "/admin/roles",
-            }
+         
         );
     }
 

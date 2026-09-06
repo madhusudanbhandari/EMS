@@ -18,6 +18,8 @@ import Employees from "./pages/admin/Employees";
 import Dashboard from "./pages/admin/Dashboard";
 import Departments from "./pages/admin/Departments";
 import Users from "./pages/admin/Users";
+import LeaveManagement from "./pages/employee/LeaveManagement";
+import Payroll from "./pages/employee/Payroll";
 
 function App() {
 
@@ -97,6 +99,24 @@ function App() {
                             <EmployeeDashboard/>
                         </MainLayout>
                         
+                    </ProtectedRoute>
+                }
+                />
+
+                <Route
+                path="/employee/leave"
+                element={
+                    <ProtectedRoute role={ROLES.EMPLOYEE}>
+                        <LeaveManagement/>
+                    </ProtectedRoute>
+                }
+                />
+
+                <Route
+                path="/employee/payroll"
+                element={
+                    <ProtectedRoute role={ROLES.EMPLOYEE}>
+                        <Payroll></Payroll>
                     </ProtectedRoute>
                 }
                 />
